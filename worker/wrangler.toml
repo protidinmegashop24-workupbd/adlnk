@@ -1,0 +1,20 @@
+name = "adlnk-shortener"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# Bind a KV namespace called LINKS. Create it with:
+#   wrangler kv namespace create LINKS
+# then paste the id it prints below.
+kv_namespaces = [
+  { binding = "LINKS", id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID" }
+]
+
+# Restrict who can call POST /api/shorten from a browser.
+# Set this to your Blogger site, e.g. "https://youradlnk.blogspot.com"
+[vars]
+CORS_ORIGIN = "*"
+
+# Point your own domain at this Worker (after adding the domain to Cloudflare):
+# [[routes]]
+# pattern = "yourdomain.com/*"
+# zone_name = "yourdomain.com"
