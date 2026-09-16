@@ -10,9 +10,15 @@ kv_namespaces = [
 ]
 
 # Restrict who can call POST /api/shorten from a browser.
-# Set this to your Blogger site, e.g. "https://youradlnk.blogspot.com"
+# Set this to your site, e.g. "https://youradlnk.blogspot.com"
 [vars]
 CORS_ORIGIN = "*"
+
+# Default (unset or "false"): links redirect instantly, like bit.ly - no
+# ad-wait page, safe to run alongside Google AdSense on the same domain.
+# Set to "true" to show the countdown/ad interstitial page instead (put
+# PropellerAds/Adsterra code in it, never Google AdSense - see index.js).
+SHOW_INTERSTITIAL = "false"
 
 # Point your own domain at this Worker (after adding the domain to Cloudflare):
 # [[routes]]

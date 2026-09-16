@@ -123,4 +123,20 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Short Link Redirect Mode
+    |--------------------------------------------------------------------------
+    |
+    | false (default): links redirect instantly, like bit.ly/TinyURL - no
+    | ad-wait page, safe alongside Google AdSense on the same domain.
+    | true: show a countdown/ad interstitial page first (see
+    | resources/views/redirect.blade.php) - put PropellerAds/Adsterra code
+    | there, never Google AdSense, and keep this on a domain that doesn't
+    | also run AdSense.
+    |
+    */
+
+    'show_interstitial' => env('SHOW_INTERSTITIAL', false),
+
 ];

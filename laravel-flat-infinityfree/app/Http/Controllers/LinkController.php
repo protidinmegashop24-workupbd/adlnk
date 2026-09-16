@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class LinkController extends Controller
 {
@@ -12,8 +11,10 @@ class LinkController extends Controller
     private const CODE_LENGTH = 6;
     public const INTERSTITIAL_SECONDS = 8;
 
+    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt'];
+
     /**
-     * POST /api/shorten — create a short code for a long URL.
+     * POST /api/shorten — create a short code (or custom alias) for a long URL.
      */
     public function store(Request $request)
     {
@@ -32,17 +33,34 @@ class LinkController extends Controller
             ], 422);
         }
 
-        $code = null;
-        for ($attempt = 0; $attempt < 5; $attempt++) {
-            $candidate = $this->randomCode();
-            if (! Link::where('code', $candidate)->exists()) {
-                $code = $candidate;
-                break;
-            }
-        }
+        $alias = trim((string) $request->input('alias', ''));
 
-        if ($code === null) {
-            return response()->json(['error' => 'সার্ভার ব্যস্ত, আবার চেষ্টা করুন।'], 503);
+        if ($alias !== '') {
+            if (! preg_match('/^[A-Za-z0-9_-]{3,30}$/', $alias)) {
+                return response()->json([
+                    'error' => 'কাস্টম নামে শুধু ইংরেজি অক্ষর, সংখ্যা, - ও _ ব্যবহার করা যাবে (৩-৩০ অক্ষর)।',
+                ], 422);
+            }
+            if (in_array(strtolower($alias), self::RESERVED_CODES, true)) {
+                return response()->json(['error' => 'এই নামটি ব্যবহার করা যাবে না, অন্য নাম দিন।'], 422);
+            }
+            if (Link::where('code', $alias)->exists()) {
+                return response()->json(['error' => 'এই কাস্টম নামটি ইতিমধ্যে ব্যবহৃত হয়েছে, অন্য নাম দিন।'], 409);
+            }
+            $code = $alias;
+        } else {
+            $code = null;
+            for ($attempt = 0; $attempt < 5; $attempt++) {
+                $candidate = $this->randomCode();
+                if (! Link::where('code', $candidate)->exists()) {
+                    $code = $candidate;
+                    break;
+                }
+            }
+
+            if ($code === null) {
+                return response()->json(['error' => 'সার্ভার ব্যস্ত, আবার চেষ্টা করুন।'], 503);
+            }
         }
 
         Link::create([
@@ -57,8 +75,9 @@ class LinkController extends Controller
     }
 
     /**
-     * GET /{code} — safety-check interstitial page, then the visitor
-     * continues to /go/{code} for the actual redirect.
+     * GET /{code} — by default, redirect instantly (bit.ly-style, AdSense-safe).
+     * If config('app.show_interstitial') is enabled, show the countdown/ad
+     * page instead and let the visitor continue via /go/{code}.
      */
     public function show(string $code)
     {
@@ -68,6 +87,12 @@ class LinkController extends Controller
             return response()->view('link-not-found', [], 404);
         }
 
+        if (! config('app.show_interstitial')) {
+            $link->increment('clicks');
+
+            return redirect()->away($link->url);
+        }
+
         return view('redirect', [
             'code' => $code,
             'seconds' => self::INTERSTITIAL_SECONDS,
@@ -75,7 +100,8 @@ class LinkController extends Controller
     }
 
     /**
-     * GET /go/{code} — perform the actual redirect and count the click.
+     * GET /go/{code} — used only in interstitial mode: perform the actual
+     * redirect and count the click after the wait/ad page.
      */
     public function go(string $code)
     {
