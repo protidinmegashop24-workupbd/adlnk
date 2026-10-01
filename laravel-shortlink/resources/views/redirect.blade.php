@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="robots" content="noindex,nofollow"/>
-<title>দয়া করে অপেক্ষা করুন...</title>
+<title>Please wait...</title>
 <style>
   body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;padding:0;color:#222}
   .wrap{max-width:640px;margin:0 auto;padding:24px 16px;text-align:center}
@@ -20,13 +20,13 @@
 <body>
   <div class="wrap">
     <div class="card">
-      <h3>আপনার লিংক তৈরি হচ্ছে...</h3>
-      <p class="muted">ভাইরাস, ম্যালওয়্যার ও ক্ষতিকর সাইট থেকে সুরক্ষার জন্য লিংকটি যাচাই করা হচ্ছে।</p>
-      <div class="ad-slot" id="ad-top"><!-- এখানে আপনার AdSense/বিজ্ঞাপন কোড বসান --></div>
+      <h3>Preparing your link...</h3>
+      <p class="muted">Checking the link to protect you from viruses, malware, and harmful sites.</p>
+      <div class="ad-slot" id="ad-top"><!-- place your AdSense/ad code here --></div>
       <div class="progress"><div class="progress-bar" id="bar"></div></div>
-      <p class="muted"><span id="secs">{{ $seconds }}</span> সেকেন্ড অপেক্ষা করুন...</p>
-      <div class="ad-slot" id="ad-bottom"><!-- এখানে আপনার AdSense/বিজ্ঞাপন কোড বসান --></div>
-      <button id="go" disabled>লিংকে যান</button>
+      <p class="muted">Please wait <span id="secs">{{ $seconds }}</span> seconds...</p>
+      <div class="ad-slot" id="ad-bottom"><!-- place your AdSense/ad code here --></div>
+      <button id="go" disabled>Continue to link</button>
     </div>
   </div>
 <script>
@@ -44,7 +44,7 @@
     if (left <= 0) {
       clearInterval(timer);
       btn.disabled = false;
-      btn.textContent = 'লিংকে যান';
+      btn.textContent = 'Continue to link';
     }
   }, 1000);
   btn.addEventListener('click', function(){

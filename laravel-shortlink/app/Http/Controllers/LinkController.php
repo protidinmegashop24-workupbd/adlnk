@@ -22,14 +22,14 @@ class LinkController extends Controller
 
         if ($longUrl === '' || ! preg_match('#^https?://#i', $longUrl) || strlen($longUrl) > 2048) {
             return response()->json([
-                'error' => 'সঠিক http:// অথবা https:// দিয়ে শুরু হওয়া একটি লিংক দিন।',
+                'error' => 'Please enter a valid link starting with http:// or https://.',
             ], 422);
         }
 
         $host = parse_url($longUrl, PHP_URL_HOST);
         if ($host !== null && strcasecmp($host, $request->getHost()) === 0) {
             return response()->json([
-                'error' => 'নিজের সাইটের লিংক শর্ট করা যাবে না।',
+                'error' => 'You cannot shorten a link to this site itself.',
             ], 422);
         }
 
@@ -38,14 +38,14 @@ class LinkController extends Controller
         if ($alias !== '') {
             if (! preg_match('/^[A-Za-z0-9_-]{3,30}$/', $alias)) {
                 return response()->json([
-                    'error' => 'কাস্টম নামে শুধু ইংরেজি অক্ষর, সংখ্যা, - ও _ ব্যবহার করা যাবে (৩-৩০ অক্ষর)।',
+                    'error' => 'Custom name can only use letters, numbers, - and _ (3-30 characters).',
                 ], 422);
             }
             if (in_array(strtolower($alias), self::RESERVED_CODES, true)) {
-                return response()->json(['error' => 'এই নামটি ব্যবহার করা যাবে না, অন্য নাম দিন।'], 422);
+                return response()->json(['error' => 'This name is not allowed, please choose another.'], 422);
             }
             if (Link::where('code', $alias)->exists()) {
-                return response()->json(['error' => 'এই কাস্টম নামটি ইতিমধ্যে ব্যবহৃত হয়েছে, অন্য নাম দিন।'], 409);
+                return response()->json(['error' => 'This custom name is already taken, please choose another.'], 409);
             }
             $code = $alias;
         } else {
@@ -59,7 +59,7 @@ class LinkController extends Controller
             }
 
             if ($code === null) {
-                return response()->json(['error' => 'সার্ভার ব্যস্ত, আবার চেষ্টা করুন।'], 503);
+                return response()->json(['error' => 'Server is busy, please try again.'], 503);
             }
         }
 

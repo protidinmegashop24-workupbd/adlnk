@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -27,9 +27,9 @@
   <p style="text-align:center;color:#555;margin-top:-8px;font-size:14px">Free URL Shortener &amp; QR Code Generator</p>
   <div class="card">
     <form id="f">
-      <label for="url">লম্বা লিংক</label>
+      <label for="url">Long link</label>
       <input id="url" type="url" placeholder="https://example.com/your-long-link" required/>
-      <label for="alias">কাস্টম নাম (ঐচ্ছিক)</label>
+      <label for="alias">Custom name (optional)</label>
       <input id="alias" type="text" placeholder="mybrand"/>
       <button id="btn" type="submit">Shorten</button>
       <div class="error" id="err"></div>
@@ -58,7 +58,7 @@
     err.textContent = '';
     result.style.display = 'none';
     btn.disabled = true;
-    btn.textContent = 'অপেক্ষা করুন...';
+    btn.textContent = 'Please wait...';
     fetch('{{ url('/api/shorten') }}', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -83,7 +83,7 @@
       .catch(function(){
         btn.disabled = false;
         btn.textContent = 'Shorten';
-        err.textContent = 'নেটওয়ার্ক এরর, আবার চেষ্টা করুন।';
+        err.textContent = 'Network error, please try again.';
       });
   });
 
