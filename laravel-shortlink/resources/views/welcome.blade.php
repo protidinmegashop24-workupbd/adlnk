@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>adlnk — ফ্রি URL Shortener</title>
+<title>klikwit — Free URL Shortener & QR Code Generator</title>
 <style>
   body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;padding:24px;color:#222}
   .wrap{max-width:560px;margin:0 auto}
@@ -23,7 +23,8 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>🔗 adlnk — ফ্রি URL Shortener</h1>
+  <h1>🔗 klikwit</h1>
+  <p style="text-align:center;color:#555;margin-top:-8px;font-size:14px">Free URL Shortener &amp; QR Code Generator</p>
   <div class="card">
     <form id="f">
       <label for="url">লম্বা লিংক</label>
@@ -40,7 +41,7 @@
       <a id="qrdl" download="qr.png">Download QR</a>
     </div>
   </div>
-  <p class="muted">Powered by adlnk</p>
+  <p class="muted">Powered by klikwit</p>
 </div>
 <script>
 (function(){
