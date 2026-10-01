@@ -12,6 +12,7 @@ class LinkController extends Controller
     public const INTERSTITIAL_SECONDS = 8;
 
     private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt'];
+    private const MAX_BULK_LINKS = 20;
 
     /**
      * POST /api/shorten — create a short code (or custom alias) for a long URL.
@@ -72,6 +73,66 @@ class LinkController extends Controller
         return response()->json([
             'short' => url("/{$code}"),
         ]);
+    }
+
+    /**
+     * POST /api/bulk-shorten — shorten several URLs at once (one per line).
+     * No custom aliases here; each line gets an auto-generated code.
+     */
+    public function bulkStore(Request $request)
+    {
+        $raw = (string) $request->input('urls', '');
+        $lines = preg_split('/\r\n|\r|\n/', $raw);
+        $lines = array_values(array_filter(array_map('trim', $lines), fn ($line) => $line !== ''));
+
+        if (count($lines) === 0) {
+            return response()->json([
+                'error' => 'Please enter at least one link, one per line.',
+            ], 422);
+        }
+
+        if (count($lines) > self::MAX_BULK_LINKS) {
+            return response()->json([
+                'error' => 'You can shorten up to '.self::MAX_BULK_LINKS.' links at a time.',
+            ], 422);
+        }
+
+        $results = array_map(fn ($longUrl) => $this->shortenOne($longUrl, $request), $lines);
+
+        return response()->json(['results' => $results]);
+    }
+
+    /**
+     * Validate and shorten a single URL for the bulk endpoint. Mirrors the
+     * validation in store() but always auto-generates the code (no alias).
+     */
+    private function shortenOne(string $longUrl, Request $request): array
+    {
+        if (! preg_match('#^https?://#i', $longUrl) || strlen($longUrl) > 2048) {
+            return ['url' => $longUrl, 'error' => 'Invalid link (must start with http:// or https://).'];
+        }
+
+        $host = parse_url($longUrl, PHP_URL_HOST);
+        if ($host !== null && strcasecmp($host, $request->getHost()) === 0) {
+            return ['url' => $longUrl, 'error' => 'Cannot shorten a link to this site itself.'];
+        }
+
+        $code = null;
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $candidate = $this->randomCode();
+            if (! Link::where('code', $candidate)->exists()) {
+                $code = $candidate;
+                break;
+            }
+        }
+
+        if ($code === null) {
+            return ['url' => $longUrl, 'error' => 'Server is busy, please try again.'];
+        }
+
+        Link::create(['code' => $code, 'url' => $longUrl, 'clicks' => 0]);
+
+        return ['url' => $longUrl, 'short' => url("/{$code}")];
     }
 
     /**
