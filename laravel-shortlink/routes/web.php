@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BioPageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::delete('/dashboard/{link}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
+    Route::get('/bio', [BioPageController::class, 'edit'])->name('bio.edit');
+    Route::post('/bio', [BioPageController::class, 'update'])->name('bio.update');
 });
+
+// Public link-in-bio page, e.g. klikwit.com/u/yourname.
+Route::get('/u/{slug}', [BioPageController::class, 'show'])
+    ->where('slug', '[A-Za-z0-9_-]{3,30}')
+    ->name('bio.show');
 
 // Order matters: specific routes (above, and /go/{code} below) must be
 // registered before the catch-all {code} pattern, since words like

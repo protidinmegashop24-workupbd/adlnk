@@ -11,7 +11,7 @@ class LinkController extends Controller
     private const CODE_LENGTH = 6;
     public const INTERSTITIAL_SECONDS = 8;
 
-    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt', 'register', 'login', 'logout', 'dashboard'];
+    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt', 'register', 'login', 'logout', 'dashboard', 'bio', 'u', 'sitemap.xml'];
     private const MAX_BULK_LINKS = 20;
 
     /**

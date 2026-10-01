@@ -62,6 +62,7 @@
   <div>
     @auth
       <a href="{{ route('dashboard') }}">My Links</a>
+      <a href="{{ route('bio.edit') }}">Link-in-Bio</a>
       <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button class="linklike" type="submit">Log Out</button>
