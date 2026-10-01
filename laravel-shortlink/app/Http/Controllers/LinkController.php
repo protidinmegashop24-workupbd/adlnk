@@ -11,7 +11,7 @@ class LinkController extends Controller
     private const CODE_LENGTH = 6;
     public const INTERSTITIAL_SECONDS = 8;
 
-    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt'];
+    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt', 'register', 'login', 'logout', 'dashboard'];
     private const MAX_BULK_LINKS = 20;
 
     /**
@@ -68,6 +68,7 @@ class LinkController extends Controller
             'code' => $code,
             'url' => $longUrl,
             'clicks' => 0,
+            'user_id' => $request->user()?->id,
         ]);
 
         return response()->json([
@@ -130,7 +131,7 @@ class LinkController extends Controller
             return ['url' => $longUrl, 'error' => 'Server is busy, please try again.'];
         }
 
-        Link::create(['code' => $code, 'url' => $longUrl, 'clicks' => 0]);
+        Link::create(['code' => $code, 'url' => $longUrl, 'clicks' => 0, 'user_id' => $request->user()?->id]);
 
         return ['url' => $longUrl, 'short' => url("/{$code}")];
     }

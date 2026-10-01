@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /go/
+
+Sitemap: https://klikwit.com/sitemap.xml

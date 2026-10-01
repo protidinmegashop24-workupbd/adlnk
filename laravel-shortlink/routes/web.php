@@ -1,14 +1,30 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->name('home');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
-// Order matters: specific routes before the catch-all {code} pattern below.
-// Pattern allows both random codes and custom aliases (3-30 chars, - and _ allowed).
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::delete('/dashboard/{link}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
+});
+
+// Order matters: specific routes (above, and /go/{code} below) must be
+// registered before the catch-all {code} pattern, since words like
+// "login" or "dashboard" would otherwise also match that pattern.
 Route::get('/go/{code}', [LinkController::class, 'go'])
     ->where('code', '[A-Za-z0-9_-]{3,30}');
 
