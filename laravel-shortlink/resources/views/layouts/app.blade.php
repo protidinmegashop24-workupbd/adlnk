@@ -60,6 +60,7 @@
 <div class="nav">
   <a class="brand" href="{{ route('home') }}">🔗 klikwit</a>
   <div>
+    <a href="{{ route('blog.index') }}">Blog</a>
     @auth
       <a href="{{ route('dashboard') }}">My Links</a>
       <a href="{{ route('bio.edit') }}">Link-in-Bio</a>

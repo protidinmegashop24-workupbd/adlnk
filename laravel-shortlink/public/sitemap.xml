@@ -6,13 +6,23 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://klikwit.com/register</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://klikwit.com/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://klikwit.com/login</loc>
+    <loc>https://klikwit.com/blog/what-is-a-url-shortener</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://klikwit.com/blog/how-to-create-a-qr-code</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://klikwit.com/blog/what-is-link-in-bio</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
