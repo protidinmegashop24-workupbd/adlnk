@@ -4,7 +4,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;padding:
 .tab.active{background:#fff;color:#0d6efd;box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:bold}
 .card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:24px;margin-top:16px}
 label{display:block;font-size:14px;color:#555;margin:12px 0 4px}
-input[type=text],input[type=url],input[type=email],input[type=password],input[type=datetime-local]{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:16px}
+input[type=text],input[type=url],input[type=email],input[type=password],input[type=datetime-local],select{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:16px;background:#fff}
 textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:15px;font-family:inherit;resize:vertical}
 button{background:#0d6efd;color:#fff;border:0;padding:12px 20px;border-radius:6px;font-size:16px;cursor:pointer;margin-top:16px;width:100%}
 button:disabled{background:#9db8e8;cursor:not-allowed}

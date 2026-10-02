@@ -13,11 +13,29 @@ class DashboardController extends Controller
     {
         $userLinks = $request->user()->links();
 
-        $links = (clone $userLinks)->latest()->paginate(15);
+        $search = trim((string) $request->query('q', ''));
+        $sort = $request->query('sort', 'newest');
+
+        $filtered = (clone $userLinks);
+        if ($search !== '') {
+            $filtered->where(function ($query) use ($search) {
+                $query->where('code', 'like', "%{$search}%")
+                    ->orWhere('url', 'like', "%{$search}%");
+            });
+        }
+
+        match ($sort) {
+            'oldest' => $filtered->oldest(),
+            'most_clicks' => $filtered->orderByDesc('clicks'),
+            'least_clicks' => $filtered->orderBy('clicks'),
+            default => $filtered->latest(),
+        };
+
+        $links = $filtered->paginate(15)->withQueryString();
         $totalLinks = (clone $userLinks)->count();
         $totalClicks = (clone $userLinks)->sum('clicks');
 
-        return view('dashboard', compact('links', 'totalLinks', 'totalClicks'));
+        return view('dashboard', compact('links', 'totalLinks', 'totalClicks', 'search', 'sort'));
     }
 
     public function analytics(Request $request, Link $link): View

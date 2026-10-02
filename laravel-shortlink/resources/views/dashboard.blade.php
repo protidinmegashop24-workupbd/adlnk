@@ -9,6 +9,12 @@
   .quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
   .quick-actions a{flex:1;min-width:140px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:14px;text-align:center;text-decoration:none;color:#222;font-size:14px;font-weight:bold}
   .quick-actions a:hover{border-color:#0d6efd;color:#0d6efd}
+  .filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+  .filter-bar .field{flex:1;min-width:160px}
+  .filter-bar label{margin:0 0 4px}
+  .filter-bar input,.filter-bar select{margin:0}
+  .filter-bar button{width:auto;margin:0;padding:10px 20px;flex-shrink:0}
+  .filter-bar .clear-link{font-size:13px;align-self:center;white-space:nowrap}
 @endsection
 
 @section('content')
@@ -37,9 +43,32 @@
   </div>
 
   <div class="card">
-    @if ($links->isEmpty())
+    @if ($totalLinks === 0)
       <p class="muted" style="margin-top:0">You haven't shortened any links while logged in yet. <a href="{{ route('home') }}">Create one</a>.</p>
     @else
+      <form method="GET" action="{{ route('dashboard') }}" class="filter-bar">
+        <div class="field">
+          <label for="q">Search</label>
+          <input id="q" type="text" name="q" value="{{ $search }}" placeholder="Search by short code or URL"/>
+        </div>
+        <div class="field" style="flex:0 0 180px">
+          <label for="sort">Sort by</label>
+          <select id="sort" name="sort">
+            <option value="newest" @selected($sort === 'newest')>Newest first</option>
+            <option value="oldest" @selected($sort === 'oldest')>Oldest first</option>
+            <option value="most_clicks" @selected($sort === 'most_clicks')>Most clicks</option>
+            <option value="least_clicks" @selected($sort === 'least_clicks')>Least clicks</option>
+          </select>
+        </div>
+        <button type="submit">Apply</button>
+        @if ($search !== '' || $sort !== 'newest')
+          <a class="clear-link" href="{{ route('dashboard') }}">Clear</a>
+        @endif
+      </form>
+
+      @if ($links->isEmpty())
+        <p class="muted" style="margin-top:0">No links match your search. <a href="{{ route('dashboard') }}">Clear filters</a>.</p>
+      @else
       <table>
         <thead>
           <tr>
@@ -79,6 +108,7 @@
           <a href="{{ $links->nextPageUrl() }}">Next &raquo;</a>
         @endif
       </div>
+      @endif
     @endif
   </div>
 @endsection
