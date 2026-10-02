@@ -33,6 +33,9 @@
 @endsection
 
 @section('content')
+@if (session('status'))
+  <div class="status" style="max-width:560px;margin:0 auto 16px">{{ session('status') }}</div>
+@endif
 <div class="hero-wrap" id="shortener">
   <div class="tabs">
     <button class="tab active" id="tab-single" type="button">Single Link</button>

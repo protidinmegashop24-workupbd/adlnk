@@ -7,6 +7,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportAbuseController;
 use App\Http\Controllers\UrlToolsController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{link}/analytics', [DashboardController::class, 'analytics'])->name('dashboard.analytics');
     Route::get('/bio', [BioPageController::class, 'edit'])->name('bio.edit');
     Route::post('/bio', [BioPageController::class, 'update'])->name('bio.update');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Public link-in-bio page, e.g. klikwit.com/u/yourname.

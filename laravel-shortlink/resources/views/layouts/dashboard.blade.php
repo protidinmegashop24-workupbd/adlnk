@@ -58,6 +58,7 @@
           <div class="pd-name">{{ auth()->user()->name }}</div>
           <div class="pd-email">{{ auth()->user()->email }}</div>
         </div>
+        <a href="{{ route('profile.edit') }}">Profile Settings</a>
         <a href="{{ route('blog.index') }}">Blog</a>
         <a href="{{ route('tools.index') }}">All Tools</a>
         <form method="POST" action="{{ route('logout') }}">
