@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\SeoToolsController;
 use App\Http\Controllers\UrlToolsController;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Session\Middleware\StartSession;
@@ -26,3 +27,9 @@ Route::middleware([EncryptCookies::class, StartSession::class])->group(function 
 // this, hitting one of these endpoints would eat into the other's budget.
 Route::post('/expand', [UrlToolsController::class, 'expand'])->middleware('throttle:15,1,expand');
 Route::post('/check', [UrlToolsController::class, 'check'])->middleware('throttle:15,1,check');
+
+// SEO Tools (Phase 2) that analyze another site's HTML — same SSRF-safe
+// fetch path as expand/check above, each with its own throttle bucket.
+Route::post('/seo/meta-tag-checker', [SeoToolsController::class, 'metaTagCheckerAnalyze'])->middleware('throttle:15,1,seo-meta');
+Route::post('/seo/canonical-checker', [SeoToolsController::class, 'canonicalCheckerAnalyze'])->middleware('throttle:15,1,seo-canonical');
+Route::post('/seo/open-graph-checker', [SeoToolsController::class, 'openGraphCheckerAnalyze'])->middleware('throttle:15,1,seo-og');

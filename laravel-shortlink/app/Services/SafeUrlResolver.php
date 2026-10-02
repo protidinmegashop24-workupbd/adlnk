@@ -19,6 +19,7 @@ class SafeUrlResolver
 {
     private const MAX_HOPS = 8;
     private const TIMEOUT_SECONDS = 5;
+    private const MAX_BODY_BYTES = 1_000_000; // 1 MB — plenty for <head> tags, caps memory/time on huge pages
 
     /**
      * @return array{hops: array<int, array{url: string, status: ?int}>, final_url: string, status: ?int, error: ?string}
@@ -84,12 +85,93 @@ class SafeUrlResolver
     }
 
     /**
+     * Safely follows redirects to a final destination (same protections as
+     * resolve()) and downloads up to MAX_BODY_BYTES of its HTML body — used
+     * by the SEO tools that need to read <head> tags (Meta Tag Checker,
+     * Canonical Checker, Open Graph Checker). The IP is re-validated
+     * immediately before this second request as a DNS-rebinding guard: a
+     * hostile DNS server could otherwise answer public on the first lookup
+     * (in resolve()) and private on a second lookup moments later.
+     *
+     * @return array{html: ?string, final_url: string, status: ?int, error: ?string}
+     */
+    public function fetchHtml(string $url): array
+    {
+        $resolved = $this->resolve($url);
+
+        if ($resolved['error']) {
+            return ['html' => null, 'final_url' => $resolved['final_url'], 'status' => null, 'error' => $resolved['error']];
+        }
+
+        if ($resolved['status'] === null || $resolved['status'] >= 400) {
+            return ['html' => null, 'final_url' => $resolved['final_url'], 'status' => $resolved['status'], 'error' => "This page returned an error (HTTP {$resolved['status']})."];
+        }
+
+        $finalUrl = $resolved['final_url'];
+        $host = parse_url($finalUrl, PHP_URL_HOST);
+        $ips = $host ? $this->resolveIps($host) : [];
+
+        if (empty($ips) || ! $this->allPublic($ips)) {
+            return ['html' => null, 'final_url' => $finalUrl, 'status' => null, 'error' => 'This link points to a private or disallowed address.'];
+        }
+
+        try {
+            $response = Http::timeout(self::TIMEOUT_SECONDS)
+                ->connectTimeout(self::TIMEOUT_SECONDS)
+                ->withUserAgent('klikwit-seo-tools/1.0')
+                ->withOptions(['allow_redirects' => false, 'stream' => true])
+                ->get($finalUrl);
+        } catch (\Throwable $e) {
+            return ['html' => null, 'final_url' => $finalUrl, 'status' => null, 'error' => 'Could not connect to this link.'];
+        }
+
+        $contentType = (string) $response->header('Content-Type');
+        if ($contentType !== '' && ! str_contains(strtolower($contentType), 'html')) {
+            try {
+                $response->toPsrResponse()->getBody()->close();
+            } catch (\Throwable $e) {
+                // ignore
+            }
+
+            return ['html' => null, 'final_url' => $finalUrl, 'status' => $response->status(), 'error' => 'This URL does not return an HTML page.'];
+        }
+
+        $html = '';
+
+        try {
+            $body = $response->toPsrResponse()->getBody();
+            while (! $body->eof() && strlen($html) < self::MAX_BODY_BYTES) {
+                $chunk = $body->read(8192);
+                if ($chunk === '') {
+                    break;
+                }
+                $html .= $chunk;
+            }
+            $body->close();
+        } catch (\Throwable $e) {
+            return ['html' => null, 'final_url' => $finalUrl, 'status' => null, 'error' => 'The website took too long to respond or closed the connection.'];
+        }
+
+        if ($html === '') {
+            return ['html' => null, 'final_url' => $finalUrl, 'status' => $response->status(), 'error' => 'This page returned an empty response.'];
+        }
+
+        return ['html' => $html, 'final_url' => $finalUrl, 'status' => $response->status(), 'error' => null];
+    }
+
+    /**
      * @return string[] every IP address this host resolves to (empty if it doesn't resolve)
      */
     private function resolveIps(string $host): array
     {
-        if (filter_var($host, FILTER_VALIDATE_IP)) {
-            return [$host];
+        // parse_url() keeps the brackets on an IPv6 literal host (e.g. "[::1]"),
+        // which filter_var() doesn't accept — without stripping them first, no
+        // IPv6 literal (public or private) would ever validate here, and it
+        // would incorrectly fall through to a DNS lookup of the literal string
+        // "[::1]" as if it were a hostname.
+        $bareHost = trim($host, '[]');
+        if (filter_var($bareHost, FILTER_VALIDATE_IP)) {
+            return [$bareHost];
         }
 
         $ips = [];

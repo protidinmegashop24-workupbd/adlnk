@@ -9,12 +9,16 @@ use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportAbuseController;
+use App\Http\Controllers\SeoToolsController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UrlToolsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -56,6 +60,22 @@ Route::get('/tools', [UrlToolsController::class, 'indexPage'])->name('tools.inde
 Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
 Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
 Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])->name('tools.utm');
+
+// SEO Tools (Phase 2) — the hub plus one page per tool. The three that need
+// to fetch another site's HTML (meta/canonical/open-graph) also register a
+// throttled POST endpoint in routes/api.php; the rest run entirely in the
+// browser and only need their page route here.
+Route::get('/seo-tools', [SeoToolsController::class, 'hub'])->name('seo-tools.index');
+Route::get('/tools/meta-tag-checker', [SeoToolsController::class, 'metaTagCheckerPage'])->name('seo-tools.meta-tag-checker');
+Route::get('/tools/serp-preview', [SeoToolsController::class, 'serpPreviewPage'])->name('seo-tools.serp-preview');
+Route::get('/tools/keyword-density-checker', [SeoToolsController::class, 'keywordDensityPage'])->name('seo-tools.keyword-density-checker');
+Route::get('/tools/word-counter', [SeoToolsController::class, 'wordCounterPage'])->name('seo-tools.word-counter');
+Route::get('/tools/seo-url-checker', [SeoToolsController::class, 'seoUrlCheckerPage'])->name('seo-tools.seo-url-checker');
+Route::get('/tools/slug-generator', [SeoToolsController::class, 'slugGeneratorPage'])->name('seo-tools.slug-generator');
+Route::get('/tools/robots-txt-generator', [SeoToolsController::class, 'robotsGeneratorPage'])->name('seo-tools.robots-txt-generator');
+Route::get('/tools/xml-sitemap-generator', [SeoToolsController::class, 'sitemapGeneratorPage'])->name('seo-tools.xml-sitemap-generator');
+Route::get('/tools/canonical-checker', [SeoToolsController::class, 'canonicalCheckerPage'])->name('seo-tools.canonical-checker');
+Route::get('/tools/open-graph-checker', [SeoToolsController::class, 'openGraphCheckerPage'])->name('seo-tools.open-graph-checker');
 
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');

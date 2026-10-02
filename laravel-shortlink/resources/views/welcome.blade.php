@@ -19,12 +19,6 @@
   .steps p{font-size:14px;color:#444;margin:0}
   .usecase-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
   .usecase-badge{background:#fff;border:1px solid #e0e0e0;border-radius:20px;padding:8px 16px;font-size:14px}
-  details.faq-item{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:14px 18px;margin-bottom:10px;max-width:700px;margin-left:auto;margin-right:auto}
-  details.faq-item summary{cursor:pointer;font-weight:bold;font-size:15px}
-  details.faq-item p{margin:10px 0 0;color:#555;font-size:15px}
-  .final-cta{text-align:center;margin-top:48px;padding:36px 20px;background:#0d6efd;border-radius:12px;color:#fff}
-  .final-cta h2{color:#fff;margin-top:0}
-  .final-cta a.cta-btn{display:inline-block;background:#fff;color:#0d6efd;padding:12px 28px;border-radius:6px;font-weight:bold;text-decoration:none;margin-top:8px}
 @endsection
 
 @section('hero')

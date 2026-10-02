@@ -46,6 +46,19 @@
   .profile-dropdown form{display:block;margin:0}
   .profile-dropdown a,.profile-dropdown button{display:block;width:100%;text-align:left;padding:10px 16px;font-size:14px;color:#444;text-decoration:none;background:none;border:0;cursor:pointer;margin:0 !important;border-radius:0}
   .profile-dropdown a:hover,.profile-dropdown button:hover{background:#f4f6f8}
+  .nav-dropdown{position:relative;display:inline-block;margin-left:20px}
+  .nav-dropdown-trigger{background:none;border:0;color:#444;font-size:15px;cursor:pointer;padding:0;margin:0;width:auto;font-family:inherit}
+  .nav-dropdown-trigger:hover{color:#0d6efd}
+  .nav-dropdown-panel{display:none;position:absolute;top:30px;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);padding:16px;z-index:30;min-width:440px;grid-template-columns:1fr 1fr;gap:8px 28px}
+  .nav-dropdown-panel.show{display:grid}
+  .nav-dropdown-heading{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#888;font-weight:bold;margin-bottom:6px}
+  .nav-dropdown-col a{display:block;padding:6px 0;color:#333;text-decoration:none;font-size:14px;margin:0 !important}
+  .nav-dropdown-col a:hover{color:#0d6efd}
+  @media (max-width:640px){
+    .nav-dropdown{position:static;margin-left:12px}
+    .nav-dropdown.open{flex-basis:100%}
+    .nav-dropdown-panel{position:static;box-shadow:none;border:0;min-width:0;width:100%;grid-template-columns:1fr;padding:8px 0 0;margin-top:4px}
+  }
   @yield('extra-style')
 </style>
 </head>
@@ -53,7 +66,7 @@
 <div class="nav">
   <a class="brand" href="{{ route('home') }}"><img src="{{ asset('images/logo-mark.png') }}" alt="" width="26" height="26"/> klikwit</a>
   <div>
-    <a href="{{ route('tools.index') }}">Tools</a>
+    @include('partials.tools-nav-dropdown')
     <a href="{{ route('dashboard') }}">Analytics</a>
     <a href="{{ route('blog.index') }}">Blog</a>
     @auth
@@ -115,6 +128,28 @@
     dd.classList.toggle('show');
   });
   document.addEventListener('click', function(){ dd.classList.remove('show'); });
+})();
+(function(){
+  var trigger = document.getElementById('toolsTrigger');
+  var panel = document.getElementById('toolsPanel');
+  var wrapper = trigger ? trigger.closest('.nav-dropdown') : null;
+  if (!trigger || !panel || !wrapper) return;
+  function close() {
+    panel.classList.remove('show');
+    wrapper.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+  trigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    var isOpen = panel.classList.toggle('show');
+    wrapper.classList.toggle('open', isOpen);
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  panel.addEventListener('click', function(e){ e.stopPropagation(); });
+  document.addEventListener('click', close);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') close();
+  });
 })();
 </script>
 </body>
