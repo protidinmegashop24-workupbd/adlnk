@@ -43,18 +43,18 @@
   </div>
 
   <div class="card" id="single-section">
-    <form id="f">
+    <form id="f" autocomplete="off">
       <label for="url">Long link</label>
-      <input id="url" type="url" placeholder="https://example.com/your-long-link" required/>
+      <input id="url" type="url" placeholder="https://example.com/your-long-link" autocomplete="off" required/>
       <label for="alias">Custom name (optional)</label>
-      <input id="alias" type="text" placeholder="mybrand"/>
+      <input id="alias" type="text" placeholder="mybrand" autocomplete="off"/>
 
       <div style="margin-top:12px">
         <a href="#" id="toggleAdvanced" style="font-size:13px">+ Advanced options (password, expiration)</a>
       </div>
       <div id="advancedOptions" style="display:none">
         <label for="password">Password protect (optional)</label>
-        <input id="password" type="password" placeholder="Leave blank for no password"/>
+        <input id="password" type="password" placeholder="Leave blank for no password" autocomplete="new-password"/>
         <label for="expires_at">Expires on (optional)</label>
         <input id="expires_at" type="datetime-local"/>
       </div>

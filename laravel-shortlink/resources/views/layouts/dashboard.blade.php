@@ -41,13 +41,13 @@
   <div class="sidebar">
     <a class="brand" href="{{ route('home') }}"><img src="{{ asset('images/logo-mark.png') }}" alt="" width="22" height="22"/><span class="label"> klikwit</span></a>
     <nav>
-      <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') || request()->routeIs('dashboard.analytics') ? 'active' : '' }}">🏠 <span class="label">My Links</span></a>
+      <a href="{{ route('home') }}">🏠 <span class="label">Home</span></a>
+      <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') || request()->routeIs('dashboard.analytics') ? 'active' : '' }}">🔗 <span class="label">My Links</span></a>
       <a href="{{ route('bio.edit') }}" class="{{ request()->routeIs('bio.*') ? 'active' : '' }}">👤 <span class="label">Link-in-Bio</span></a>
       <a href="{{ route('tools.index') }}">🧰 <span class="label">Tools</span></a>
       @if (auth()->user()?->is_admin)
         <a href="{{ route('admin.reports') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">🛡️ <span class="label">Abuse Reports</span></a>
       @endif
-      <a href="{{ route('home') }}">🌐 <span class="label">Visit Site</span></a>
     </nav>
   </div>
   <div class="main-area">
