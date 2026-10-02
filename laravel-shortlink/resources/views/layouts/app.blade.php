@@ -20,8 +20,6 @@
   .nav a:hover{color:#0d6efd}
   .nav .brand{font-size:1.2rem;font-weight:bold;color:#222;text-decoration:none;margin-left:0}
   .nav form{display:inline;margin-left:20px}
-  .nav button.linklike{background:none;border:0;color:#444;font-size:14px;cursor:pointer;padding:0;margin:0;width:auto}
-  .nav button.linklike:hover{color:#0d6efd}
   .btn-pill{background:#0d6efd;color:#fff !important;padding:9px 20px;border-radius:999px;font-weight:bold;font-size:13px !important}
   .btn-pill:hover{background:#0b5ed7;color:#fff !important}
   @media (max-width:480px){.nav a{margin-left:12px;font-size:13px}}
@@ -38,6 +36,16 @@
   .footer-links a{color:#666;text-decoration:none;font-size:13px}
   .footer-links a:hover{color:#0d6efd}
   .footer-copy{text-align:center;color:#999;font-size:12px;margin-top:16px}
+  .nav-profile{position:relative;display:inline-block;margin-left:20px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#0d6efd;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;border:0;font-size:13px;margin:0;padding:0;vertical-align:middle}
+  .profile-dropdown{position:absolute;top:42px;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);min-width:200px;display:none;z-index:20;overflow:hidden;text-align:left}
+  .profile-dropdown.show{display:block}
+  .profile-dropdown .pd-header{padding:12px 16px;border-bottom:1px solid #eee}
+  .profile-dropdown .pd-name{font-weight:bold;font-size:14px}
+  .profile-dropdown .pd-email{font-size:12px;color:#888;margin-top:2px;word-break:break-all}
+  .profile-dropdown form{display:block;margin:0}
+  .profile-dropdown a,.profile-dropdown button{display:block;width:100%;text-align:left;padding:10px 16px;font-size:13px;color:#444;text-decoration:none;background:none;border:0;cursor:pointer;margin:0 !important;border-radius:0}
+  .profile-dropdown a:hover,.profile-dropdown button:hover{background:#f4f6f8}
   @yield('extra-style')
 </style>
 </head>
@@ -50,10 +58,20 @@
     <a href="{{ route('blog.index') }}">Blog</a>
     @auth
       <a href="{{ route('dashboard') }}">My Links</a>
-      <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button class="linklike" type="submit">Log Out</button>
-      </form>
+      <div class="nav-profile">
+        <button class="avatar" id="avatarBtn" type="button">{{ strtoupper(substr(auth()->user()->name ?? '?', 0, 1)) }}</button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="pd-header">
+            <div class="pd-name">{{ auth()->user()->name }}</div>
+            <div class="pd-email">{{ auth()->user()->email }}</div>
+          </div>
+          <a href="{{ route('profile.edit') }}">Profile Settings</a>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">Sign Out</button>
+          </form>
+        </div>
+      </div>
     @else
       <a href="{{ route('login') }}">Log In</a>
       <a class="btn-pill" href="{{ route('register') }}">Sign Up Free</a>
@@ -87,5 +105,17 @@
     <p class="footer-copy">&copy; {{ date('Y') }} klikwit. All rights reserved.</p>
   </div>
 </div>
+<script>
+(function(){
+  var btn = document.getElementById('avatarBtn');
+  var dd = document.getElementById('profileDropdown');
+  if (!btn || !dd) return;
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    dd.classList.toggle('show');
+  });
+  document.addEventListener('click', function(){ dd.classList.remove('show'); });
+})();
+</script>
 </body>
 </html>
