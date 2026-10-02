@@ -40,6 +40,8 @@
     </div>
   </div>
 
+  <p class="muted">More tools: <a href="{{ route('tools.expand') }}">URL Expander</a> &middot; <a href="{{ route('tools.check') }}">Link Checker</a></p>
+
   @guest
     <p class="muted">Powered by klikwit — <a href="{{ route('register') }}">Sign up free</a> to save your links and track clicks.</p>
   @else

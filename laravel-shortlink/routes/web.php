@@ -5,6 +5,7 @@ use App\Http\Controllers\BioPageController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\UrlToolsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +36,9 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])
     ->where('slug', '[A-Za-z0-9_-]{3,80}')
     ->name('blog.show');
+
+Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
+Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
 
 // Order matters: specific routes (above, and /go/{code} below) must be
 // registered before the catch-all {code} pattern, since words like

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\UrlToolsController;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
@@ -17,3 +18,8 @@ Route::middleware([EncryptCookies::class, StartSession::class])->group(function 
     // creates several links per request from an unauthenticated endpoint.
     Route::post('/bulk-shorten', [LinkController::class, 'bulkStore'])->middleware('throttle:5,1');
 });
+
+// URL Expander / Link Checker: each call makes an outbound HTTP request on
+// the server's behalf, so these are throttled harder than the shortener.
+Route::post('/expand', [UrlToolsController::class, 'expand'])->middleware('throttle:15,1');
+Route::post('/check', [UrlToolsController::class, 'check'])->middleware('throttle:15,1');
