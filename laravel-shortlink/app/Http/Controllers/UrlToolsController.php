@@ -11,6 +11,11 @@ class UrlToolsController extends Controller
 {
     public function __construct(private readonly SafeUrlResolver $resolver) {}
 
+    public function indexPage(): View
+    {
+        return view('tools.index');
+    }
+
     public function expandPage(): View
     {
         return view('tools.expand');

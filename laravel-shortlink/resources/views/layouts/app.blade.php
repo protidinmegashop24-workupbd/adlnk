@@ -14,8 +14,10 @@
 <meta property="og:url" content="{{ url()->current() }}"/>
 <style>
   body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;padding:0;color:#222}
-  .nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+  .nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 0}
+  .nav > div{display:flex;flex-wrap:wrap;align-items:center}
   .nav a{color:#0d6efd;text-decoration:none;font-size:14px;margin-left:16px}
+  @media (max-width:480px){.nav a{margin-left:10px;font-size:13px}}
   .nav a:hover{text-decoration:underline}
   .nav .brand{font-size:1.1rem;font-weight:bold;color:#222;text-decoration:none;margin-left:0}
   .nav form{display:inline;margin-left:16px}
@@ -60,6 +62,8 @@
 <div class="nav">
   <a class="brand" href="{{ route('home') }}">🔗 klikwit</a>
   <div>
+    <a href="{{ route('tools.index') }}">Tools</a>
+    <a href="{{ route('dashboard') }}">Analytics</a>
     <a href="{{ route('blog.index') }}">Blog</a>
     @auth
       <a href="{{ route('dashboard') }}">My Links</a>

@@ -1,8 +1,38 @@
 @extends('layouts.app')
 
+@section('title', 'klikwit — Short Links. Simple Tools. Free to Use.')
+@section('description', 'Create short, shareable links, generate QR codes, track clicks, and manage your links—all in one simple platform.')
+@section('page-class', 'wide')
+@section('extra-style')
+  .hero-wrap{max-width:560px;margin:0 auto}
+  .hero-h1{font-size:1.7rem;text-align:center;margin-bottom:8px;line-height:1.3}
+  .hero-sub{text-align:center;color:#555;font-size:15px;margin-top:0}
+  .trust-strip{text-align:center;color:#888;font-size:13px;margin-top:16px}
+  .section{margin-top:48px}
+  .section h2{text-align:center;font-size:1.4rem;margin-bottom:20px}
+  .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .tool-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:18px;text-decoration:none;color:#222;display:block}
+  .tool-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .tool-card .icon{font-size:1.5rem}
+  .tool-card h3{font-size:.95rem;margin:6px 0 4px}
+  .tool-card p{font-size:12px;color:#666;margin:0}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;text-align:center}
+  .step-num{width:32px;height:32px;border-radius:50%;background:#0d6efd;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:bold}
+  .steps p{font-size:13px;color:#444;margin:0}
+  .usecase-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .usecase-badge{background:#fff;border:1px solid #e0e0e0;border-radius:20px;padding:8px 16px;font-size:13px}
+  details.faq-item{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:14px 18px;margin-bottom:10px;max-width:700px;margin-left:auto;margin-right:auto}
+  details.faq-item summary{cursor:pointer;font-weight:bold;font-size:14px}
+  details.faq-item p{margin:10px 0 0;color:#555;font-size:14px}
+  .final-cta{text-align:center;margin-top:48px;padding:36px 20px;background:#0d6efd;border-radius:12px;color:#fff}
+  .final-cta h2{color:#fff;margin-top:0}
+  .final-cta a.cta-btn{display:inline-block;background:#fff;color:#0d6efd;padding:12px 28px;border-radius:6px;font-weight:bold;text-decoration:none;margin-top:8px}
+@endsection
+
 @section('content')
-  <h1>🔗 klikwit</h1>
-  <p style="text-align:center;color:#555;margin-top:-8px;font-size:14px">Free URL Shortener &amp; QR Code Generator</p>
+<div class="hero-wrap" id="shortener">
+  <h1 class="hero-h1">Short Links. Simple Tools. Free to Use.</h1>
+  <p class="hero-sub">Create short, shareable links, generate QR codes, track clicks, and manage your links—all in one simple platform.</p>
 
   <div class="tabs">
     <button class="tab active" id="tab-single" type="button">Single Link</button>
@@ -51,6 +81,8 @@
     </div>
   </div>
 
+  <p class="trust-strip">No complicated setup &middot; Fast &middot; Easy to use &middot; Free tools</p>
+
   <p class="muted">More tools: <a href="{{ route('tools.expand') }}">URL Expander</a> &middot; <a href="{{ route('tools.check') }}">Link Checker</a> &middot; <a href="{{ route('tools.utm') }}">UTM Builder</a></p>
 
   @guest
@@ -58,6 +90,100 @@
   @else
     <p class="muted">Powered by klikwit — <a href="{{ route('dashboard') }}">view your saved links</a>.</p>
   @endguest
+</div>
+
+<div class="section">
+  <h2>Everything You Need to Manage Links</h2>
+  <div class="tool-grid">
+    <a class="tool-card" href="#shortener">
+      <div class="icon">🔗</div>
+      <h3>URL Shortener</h3>
+      <p>Create short, clean links in seconds.</p>
+    </a>
+    <a class="tool-card" href="#bulk-section">
+      <div class="icon">📦</div>
+      <h3>Bulk URL Shortener</h3>
+      <p>Shorten multiple links at once.</p>
+    </a>
+    <a class="tool-card" href="#shortener">
+      <div class="icon">▣</div>
+      <h3>QR Generator</h3>
+      <p>Turn any URL into a downloadable QR code.</p>
+    </a>
+    <a class="tool-card" href="{{ route('dashboard') }}">
+      <div class="icon">📊</div>
+      <h3>Link Analytics</h3>
+      <p>Understand clicks and link performance.</p>
+    </a>
+    <a class="tool-card" href="#shortener">
+      <div class="icon">🎨</div>
+      <h3>Custom Links</h3>
+      <p>Create memorable custom slugs.</p>
+    </a>
+    <a class="tool-card" href="{{ route('bio.edit') }}">
+      <div class="icon">👤</div>
+      <h3>Link-in-Bio</h3>
+      <p>Share multiple links from one simple page.</p>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div><div class="step-num">1</div><p>Paste your URL</p></div>
+    <div><div class="step-num">2</div><p>Customize your link</p></div>
+    <div><div class="step-num">3</div><p>Share it anywhere</p></div>
+    <div><div class="step-num">4</div><p>Track performance</p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Built for Creators, Businesses and Everyday Sharing</h2>
+  <div class="usecase-grid">
+    <span class="usecase-badge">Social media creators</span>
+    <span class="usecase-badge">Small businesses</span>
+    <span class="usecase-badge">Bloggers</span>
+    <span class="usecase-badge">YouTubers</span>
+    <span class="usecase-badge">Marketing teams</span>
+    <span class="usecase-badge">Online sellers</span>
+    <span class="usecase-badge">Students</span>
+    <span class="usecase-badge">Event organizers</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Frequently Asked Questions</h2>
+  <details class="faq-item">
+    <summary>What is a URL shortener?</summary>
+    <p>A URL shortener takes a long web address and turns it into a short, easy-to-share link. When someone clicks the short link, they're instantly redirected to the original page.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Are klikwit short links free?</summary>
+    <p>Yes. Creating short links, QR codes, and using the bulk shortener are all free, with no signup required to get started.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I track clicks?</summary>
+    <p>Yes. Sign up for a free account and every link you shorten while logged in is saved to your dashboard with click counts, device breakdown, and referrer data.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I create a custom short link?</summary>
+    <p>Yes. Enter your own custom name in the "Custom name" field instead of using an auto-generated code.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I generate a QR code?</summary>
+    <p>Yes. Every short link automatically gets a downloadable QR code you can use on print materials, packaging, or posters.</p>
+  </details>
+  <details class="faq-item">
+    <summary>How does Bulk URL Shortener work?</summary>
+    <p>Switch to the "Bulk Shorten" tab, paste up to 20 links (one per line), and click "Shorten All" to get all your short links at once.</p>
+  </details>
+</div>
+
+<div class="final-cta">
+  <h2>Start shortening links for free.</h2>
+  <a class="cta-btn" href="#shortener">Shorten a Link Now</a>
+</div>
 
   <script>
   (function(){
@@ -66,18 +192,24 @@
     var singleSection = document.getElementById('single-section');
     var bulkSection = document.getElementById('bulk-section');
 
+    function showBulkTab(){
+      tabBulk.classList.add('active');
+      tabSingle.classList.remove('active');
+      bulkSection.style.display = 'block';
+      singleSection.style.display = 'none';
+    }
+
     tabSingle.addEventListener('click', function(){
       tabSingle.classList.add('active');
       tabBulk.classList.remove('active');
       singleSection.style.display = 'block';
       bulkSection.style.display = 'none';
     });
-    tabBulk.addEventListener('click', function(){
-      tabBulk.classList.add('active');
-      tabSingle.classList.remove('active');
-      bulkSection.style.display = 'block';
-      singleSection.style.display = 'none';
-    });
+    tabBulk.addEventListener('click', showBulkTab);
+
+    if (window.location.hash === '#bulk-section') {
+      showBulkTab();
+    }
 
     var form = document.getElementById('f');
     var btn = document.getElementById('btn');

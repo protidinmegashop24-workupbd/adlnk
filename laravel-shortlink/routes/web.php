@@ -38,6 +38,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])
     ->where('slug', '[A-Za-z0-9_-]{3,80}')
     ->name('blog.show');
 
+Route::get('/tools', [UrlToolsController::class, 'indexPage'])->name('tools.index');
 Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
 Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
 Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])->name('tools.utm');

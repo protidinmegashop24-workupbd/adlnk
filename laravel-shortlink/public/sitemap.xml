@@ -26,12 +26,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://klikwit.com/tools</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://klikwit.com/tools/expand</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://klikwit.com/tools/check</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://klikwit.com/tools/utm-builder</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
