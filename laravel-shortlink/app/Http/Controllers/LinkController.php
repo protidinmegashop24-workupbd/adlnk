@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LinkController extends Controller
 {
@@ -32,6 +33,16 @@ class LinkController extends Controller
             return response()->json([
                 'error' => 'You cannot shorten a link to this site itself.',
             ], 422);
+        }
+
+        $password = trim((string) $request->input('password', ''));
+        if ($password !== '' && strlen($password) < 4) {
+            return response()->json(['error' => 'Password must be at least 4 characters.'], 422);
+        }
+
+        $expiresAt = $this->parseExpiry($request->input('expires_at', ''));
+        if ($expiresAt === false) {
+            return response()->json(['error' => 'Please enter a valid expiration date in the future.'], 422);
         }
 
         $alias = trim((string) $request->input('alias', ''));
@@ -69,6 +80,8 @@ class LinkController extends Controller
             'url' => $longUrl,
             'clicks' => 0,
             'user_id' => $request->user()?->id,
+            'password' => $password !== '' ? Hash::make($password) : null,
+            'expires_at' => $expiresAt,
         ]);
 
         return response()->json([
@@ -149,6 +162,14 @@ class LinkController extends Controller
             return response()->view('link-not-found', [], 404);
         }
 
+        if ($link->expires_at && $link->expires_at->isPast()) {
+            return response()->view('link-expired', [], 410);
+        }
+
+        if ($link->password && ! $request->session()->get('unlocked_links.'.$link->code)) {
+            return view('link-password', ['code' => $code]);
+        }
+
         if (! config('app.show_interstitial')) {
             $link->increment('clicks');
             $this->recordClick($request, $link);
@@ -163,6 +184,34 @@ class LinkController extends Controller
     }
 
     /**
+     * POST /{code}/unlock — verify a password-protected link's password.
+     * On success, the code is remembered in the session so the visitor
+     * isn't asked again, then they're sent back to GET /{code} to proceed.
+     */
+    public function unlock(Request $request, string $code)
+    {
+        $link = Link::where('code', $code)->first();
+
+        if (! $link) {
+            return response()->view('link-not-found', [], 404);
+        }
+
+        if ($link->expires_at && $link->expires_at->isPast()) {
+            return response()->view('link-expired', [], 410);
+        }
+
+        $password = (string) $request->input('password', '');
+
+        if (! $link->password || ! Hash::check($password, $link->password)) {
+            return view('link-password', ['code' => $code, 'error' => 'Incorrect password, please try again.']);
+        }
+
+        $request->session()->put('unlocked_links.'.$code, true);
+
+        return redirect("/{$code}");
+    }
+
+    /**
      * GET /go/{code} — used only in interstitial mode: perform the actual
      * redirect and count the click after the wait/ad page.
      */
@@ -174,10 +223,33 @@ class LinkController extends Controller
             return response()->view('link-not-found', [], 404);
         }
 
+        if ($link->expires_at && $link->expires_at->isPast()) {
+            return response()->view('link-expired', [], 410);
+        }
+
         $link->increment('clicks');
         $this->recordClick($request, $link);
 
         return redirect()->away($link->url);
+    }
+
+    /**
+     * @return \Carbon\Carbon|null|false null if no expiry given, false if invalid/not in the future
+     */
+    private function parseExpiry(string $expiresAt): \Carbon\Carbon|null|false
+    {
+        $expiresAt = trim($expiresAt);
+        if ($expiresAt === '') {
+            return null;
+        }
+
+        try {
+            $parsed = \Carbon\Carbon::parse($expiresAt);
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        return $parsed->isFuture() ? $parsed : false;
     }
 
     private function recordClick(Request $request, Link $link): void

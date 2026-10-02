@@ -15,6 +15,17 @@
       <input id="url" type="url" placeholder="https://example.com/your-long-link" required/>
       <label for="alias">Custom name (optional)</label>
       <input id="alias" type="text" placeholder="mybrand"/>
+
+      <div style="margin-top:12px">
+        <a href="#" id="toggleAdvanced" style="font-size:13px">+ Advanced options (password, expiration)</a>
+      </div>
+      <div id="advancedOptions" style="display:none">
+        <label for="password">Password protect (optional)</label>
+        <input id="password" type="password" placeholder="Leave blank for no password"/>
+        <label for="expires_at">Expires on (optional)</label>
+        <input id="expires_at" type="datetime-local"/>
+      </div>
+
       <button id="btn" type="submit">Shorten</button>
       <div class="error" id="err"></div>
     </form>
@@ -75,6 +86,15 @@
     var shortInput = document.getElementById('short');
     var qr = document.getElementById('qr');
     var qrdl = document.getElementById('qrdl');
+    var toggleAdvanced = document.getElementById('toggleAdvanced');
+    var advancedOptions = document.getElementById('advancedOptions');
+
+    toggleAdvanced.addEventListener('click', function(e){
+      e.preventDefault();
+      var showing = advancedOptions.style.display === 'block';
+      advancedOptions.style.display = showing ? 'none' : 'block';
+      toggleAdvanced.textContent = showing ? '+ Advanced options (password, expiration)' : '− Hide advanced options';
+    });
 
     form.addEventListener('submit', function(e){
       e.preventDefault();
@@ -82,12 +102,20 @@
       result.style.display = 'none';
       btn.disabled = true;
       btn.textContent = 'Please wait...';
+      var expiresLocal = document.getElementById('expires_at').value;
+      var expiresUtc = '';
+      if (expiresLocal) {
+        var d = new Date(expiresLocal);
+        if (!isNaN(d.getTime())) { expiresUtc = d.toISOString(); }
+      }
       fetch('{{ url('/api/shorten') }}', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           url: document.getElementById('url').value.trim(),
-          alias: document.getElementById('alias').value.trim()
+          alias: document.getElementById('alias').value.trim(),
+          password: document.getElementById('password').value,
+          expires_at: expiresUtc
         })
       }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, body:j}; }); })
         .then(function(res){

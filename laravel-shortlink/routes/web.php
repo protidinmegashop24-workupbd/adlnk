@@ -48,5 +48,8 @@ Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])-
 Route::get('/go/{code}', [LinkController::class, 'go'])
     ->where('code', '[A-Za-z0-9_-]{3,30}');
 
+Route::post('/{code}/unlock', [LinkController::class, 'unlock'])
+    ->where('code', '[A-Za-z0-9_-]{3,30}');
+
 Route::get('/{code}', [LinkController::class, 'show'])
     ->where('code', '[A-Za-z0-9_-]{3,30}');
