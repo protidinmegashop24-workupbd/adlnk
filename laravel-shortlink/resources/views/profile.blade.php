@@ -15,7 +15,7 @@
   @endif
 
   <div class="card">
-    <h2 style="margin-top:0;font-size:1rem">Account Information</h2>
+    <h2 style="margin-top:0;font-size:1.1rem">Account Information</h2>
     @if ($errors->hasAny(['name', 'email']))
       <div class="error">{{ $errors->first('name') ?: $errors->first('email') }}</div>
     @endif
@@ -31,7 +31,7 @@
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0;font-size:1rem">Change Password</h2>
+    <h2 style="margin-top:0;font-size:1.1rem">Change Password</h2>
     @if ($errors->hasAny(['current_password', 'password']))
       <div class="error">{{ $errors->first('current_password') ?: $errors->first('password') }}</div>
     @endif
@@ -49,7 +49,7 @@
   </div>
 
   <div class="card danger-card">
-    <h2 style="margin-top:0;font-size:1rem">Danger Zone</h2>
+    <h2 style="margin-top:0;font-size:1.1rem">Danger Zone</h2>
     <p class="hint" style="margin-top:0">Deleting your account is permanent. Your short links will keep working but will no longer be tied to your account; your link-in-bio page will be deleted.</p>
     <form method="POST" action="{{ route('profile.destroy') }}" onsubmit="return confirm('Are you sure you want to permanently delete your account? This cannot be undone.');">
       @csrf

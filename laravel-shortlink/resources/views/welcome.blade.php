@@ -5,23 +5,23 @@
 @section('page-class', 'wide')
 @section('extra-style')
   .hero-wrap{max-width:560px;margin:-60px auto 0}
-  .trust-strip{text-align:center;color:#888;font-size:13px;margin-top:16px}
+  .trust-strip{text-align:center;color:#888;font-size:14px;margin-top:16px}
   .section{margin-top:48px}
-  .section h2{text-align:center;font-size:1.4rem;margin-bottom:20px}
+  .section h2{text-align:center;font-size:1.5rem;margin-bottom:20px}
   .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
   .tool-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:18px;text-decoration:none;color:#222;display:block}
   .tool-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.15)}
-  .tool-card .icon{font-size:1.5rem}
-  .tool-card h3{font-size:.95rem;margin:6px 0 4px}
-  .tool-card p{font-size:12px;color:#666;margin:0}
+  .tool-card .icon{font-size:1.6rem}
+  .tool-card h3{font-size:1.05rem;margin:6px 0 4px}
+  .tool-card p{font-size:13px;color:#666;margin:0}
   .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;text-align:center}
   .step-num{width:32px;height:32px;border-radius:50%;background:#0d6efd;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:bold}
-  .steps p{font-size:13px;color:#444;margin:0}
+  .steps p{font-size:14px;color:#444;margin:0}
   .usecase-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-  .usecase-badge{background:#fff;border:1px solid #e0e0e0;border-radius:20px;padding:8px 16px;font-size:13px}
+  .usecase-badge{background:#fff;border:1px solid #e0e0e0;border-radius:20px;padding:8px 16px;font-size:14px}
   details.faq-item{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:14px 18px;margin-bottom:10px;max-width:700px;margin-left:auto;margin-right:auto}
-  details.faq-item summary{cursor:pointer;font-weight:bold;font-size:14px}
-  details.faq-item p{margin:10px 0 0;color:#555;font-size:14px}
+  details.faq-item summary{cursor:pointer;font-weight:bold;font-size:15px}
+  details.faq-item p{margin:10px 0 0;color:#555;font-size:15px}
   .final-cta{text-align:center;margin-top:48px;padding:36px 20px;background:#0d6efd;border-radius:12px;color:#fff}
   .final-cta h2{color:#fff;margin-top:0}
   .final-cta a.cta-btn{display:inline-block;background:#fff;color:#0d6efd;padding:12px 28px;border-radius:6px;font-weight:bold;text-decoration:none;margin-top:8px}
