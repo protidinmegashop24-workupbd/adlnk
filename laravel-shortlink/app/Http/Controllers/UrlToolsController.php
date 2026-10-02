@@ -16,6 +16,11 @@ class UrlToolsController extends Controller
         return view('tools.expand');
     }
 
+    public function utmBuilderPage(): View
+    {
+        return view('tools.utm-builder');
+    }
+
     public function expand(Request $request): JsonResponse
     {
         $data = $request->validate([

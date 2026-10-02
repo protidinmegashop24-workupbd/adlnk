@@ -141,7 +141,7 @@ class LinkController extends Controller
      * If config('app.show_interstitial') is enabled, show the countdown/ad
      * page instead and let the visitor continue via /go/{code}.
      */
-    public function show(string $code)
+    public function show(Request $request, string $code)
     {
         $link = Link::where('code', $code)->first();
 
@@ -151,6 +151,7 @@ class LinkController extends Controller
 
         if (! config('app.show_interstitial')) {
             $link->increment('clicks');
+            $this->recordClick($request, $link);
 
             return redirect()->away($link->url);
         }
@@ -165,7 +166,7 @@ class LinkController extends Controller
      * GET /go/{code} — used only in interstitial mode: perform the actual
      * redirect and count the click after the wait/ad page.
      */
-    public function go(string $code)
+    public function go(Request $request, string $code)
     {
         $link = Link::where('code', $code)->first();
 
@@ -174,8 +175,39 @@ class LinkController extends Controller
         }
 
         $link->increment('clicks');
+        $this->recordClick($request, $link);
 
         return redirect()->away($link->url);
+    }
+
+    private function recordClick(Request $request, Link $link): void
+    {
+        $referrer = $request->header('referer');
+
+        $link->clickEvents()->create([
+            'referrer' => $referrer ? substr($referrer, 0, 2048) : null,
+            'device' => $this->detectDevice($request->userAgent()),
+            'user_agent' => $request->userAgent() ? substr($request->userAgent(), 0, 512) : null,
+        ]);
+    }
+
+    private function detectDevice(?string $userAgent): string
+    {
+        if (! $userAgent) {
+            return 'unknown';
+        }
+
+        $ua = strtolower($userAgent);
+
+        if (str_contains($ua, 'ipad') || str_contains($ua, 'tablet') || (str_contains($ua, 'android') && ! str_contains($ua, 'mobile'))) {
+            return 'tablet';
+        }
+
+        if (str_contains($ua, 'mobi') || str_contains($ua, 'iphone') || str_contains($ua, 'android')) {
+            return 'mobile';
+        }
+
+        return 'desktop';
     }
 
     private function randomCode(): string

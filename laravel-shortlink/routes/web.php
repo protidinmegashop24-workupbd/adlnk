@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::delete('/dashboard/{link}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
+    Route::get('/dashboard/{link}/analytics', [DashboardController::class, 'analytics'])->name('dashboard.analytics');
     Route::get('/bio', [BioPageController::class, 'edit'])->name('bio.edit');
     Route::post('/bio', [BioPageController::class, 'update'])->name('bio.update');
 });
@@ -39,6 +40,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])
 
 Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
 Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
+Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])->name('tools.utm');
 
 // Order matters: specific routes (above, and /go/{code} below) must be
 // registered before the catch-all {code} pattern, since words like

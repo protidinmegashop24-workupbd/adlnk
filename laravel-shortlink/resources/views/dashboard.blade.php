@@ -29,10 +29,11 @@
             <tr>
               <td><a href="{{ url('/'.$link->code) }}" target="_blank" rel="noopener">{{ url('/'.$link->code) }}</a></td>
               <td class="url-col" title="{{ $link->url }}">{{ $link->url }}</td>
-              <td>{{ $link->clicks }}</td>
+              <td><a href="{{ route('dashboard.analytics', $link) }}">{{ $link->clicks }}</a></td>
               <td>{{ $link->created_at->format('M j, Y') }}</td>
               <td>
-                <form method="POST" action="{{ route('dashboard.destroy', $link) }}" onsubmit="return confirm('Delete this link?');">
+                <a href="{{ route('dashboard.analytics', $link) }}" style="font-size:12px;margin-right:10px">Details</a>
+                <form method="POST" action="{{ route('dashboard.destroy', $link) }}" onsubmit="return confirm('Delete this link?');" style="display:inline">
                   @csrf
                   @method('DELETE')
                   <button class="del-btn" type="submit">Delete</button>
