@@ -11,12 +11,13 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $links = $request->user()
-            ->links()
-            ->latest()
-            ->paginate(15);
+        $userLinks = $request->user()->links();
 
-        return view('dashboard', ['links' => $links]);
+        $links = (clone $userLinks)->latest()->paginate(15);
+        $totalLinks = (clone $userLinks)->count();
+        $totalClicks = (clone $userLinks)->sum('clicks');
+
+        return view('dashboard', compact('links', 'totalLinks', 'totalClicks'));
     }
 
     public function analytics(Request $request, Link $link): View
