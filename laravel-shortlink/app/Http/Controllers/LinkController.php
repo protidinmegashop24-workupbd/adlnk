@@ -12,7 +12,7 @@ class LinkController extends Controller
     private const CODE_LENGTH = 6;
     public const INTERSTITIAL_SECONDS = 8;
 
-    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt', 'register', 'login', 'logout', 'dashboard', 'bio', 'u', 'sitemap.xml', 'blog', 'tools'];
+    private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt', 'register', 'login', 'logout', 'dashboard', 'bio', 'u', 'sitemap.xml', 'blog', 'tools', 'about', 'contact', 'privacy-policy', 'terms', 'cookie-policy', 'acceptable-use-policy', 'dmca', 'report-abuse', 'admin'];
     private const MAX_BULK_LINKS = 20;
 
     /**
@@ -162,6 +162,10 @@ class LinkController extends Controller
             return response()->view('link-not-found', [], 404);
         }
 
+        if ($link->disabled) {
+            return response()->view('link-disabled', [], 403);
+        }
+
         if ($link->expires_at && $link->expires_at->isPast()) {
             return response()->view('link-expired', [], 410);
         }
@@ -196,6 +200,10 @@ class LinkController extends Controller
             return response()->view('link-not-found', [], 404);
         }
 
+        if ($link->disabled) {
+            return response()->view('link-disabled', [], 403);
+        }
+
         if ($link->expires_at && $link->expires_at->isPast()) {
             return response()->view('link-expired', [], 410);
         }
@@ -221,6 +229,10 @@ class LinkController extends Controller
 
         if (! $link) {
             return response()->view('link-not-found', [], 404);
+        }
+
+        if ($link->disabled) {
+            return response()->view('link-disabled', [], 403);
         }
 
         if ($link->expires_at && $link->expires_at->isPast()) {

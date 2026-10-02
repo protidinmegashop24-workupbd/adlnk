@@ -3,5 +3,9 @@ Disallow: /dashboard
 Disallow: /login
 Disallow: /register
 Disallow: /go/
+Disallow: /admin/
+Disallow: /bio
+Disallow: /make-admin.php
+Disallow: /setup.php
 
 Sitemap: https://klikwit.com/sitemap.xml

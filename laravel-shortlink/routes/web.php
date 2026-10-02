@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BioPageController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ReportAbuseController;
 use App\Http\Controllers\UrlToolsController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +45,25 @@ Route::get('/tools', [UrlToolsController::class, 'indexPage'])->name('tools.inde
 Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
 Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
 Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])->name('tools.utm');
+
+Route::get('/about', [PageController::class, 'about'])->name('pages.about');
+Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
+Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('pages.privacy');
+Route::get('/terms', [PageController::class, 'terms'])->name('pages.terms');
+Route::get('/cookie-policy', [PageController::class, 'cookies'])->name('pages.cookies');
+Route::get('/acceptable-use-policy', [PageController::class, 'acceptableUse'])->name('pages.aup');
+Route::get('/dmca', [PageController::class, 'dmca'])->name('pages.dmca');
+
+Route::get('/report-abuse', [ReportAbuseController::class, 'show'])->name('report-abuse');
+Route::post('/report-abuse', [ReportAbuseController::class, 'submit'])
+    ->middleware('throttle:5,1')
+    ->name('report-abuse.submit');
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
+    Route::post('/reports/{report}/disable-link', [AdminController::class, 'disableLink'])->name('admin.reports.disable');
+    Route::post('/reports/{report}/dismiss', [AdminController::class, 'dismiss'])->name('admin.reports.dismiss');
+});
 
 // Order matters: specific routes (above, and /go/{code} below) must be
 // registered before the catch-all {code} pattern, since words like

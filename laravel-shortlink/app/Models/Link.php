@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Link extends Model
 {
-    protected $fillable = ['code', 'url', 'clicks', 'user_id', 'password', 'expires_at'];
+    protected $fillable = ['code', 'url', 'clicks', 'user_id', 'password', 'expires_at', 'disabled', 'disabled_reason'];
 
     protected $hidden = ['password'];
 
