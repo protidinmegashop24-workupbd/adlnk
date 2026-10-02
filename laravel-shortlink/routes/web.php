@@ -18,12 +18,12 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1,register');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1,login');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])
-        ->middleware('throttle:5,1')
+        ->middleware('throttle:5,1,forgot-password')
         ->name('password.email');
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
@@ -67,7 +67,7 @@ Route::get('/dmca', [PageController::class, 'dmca'])->name('pages.dmca');
 
 Route::get('/report-abuse', [ReportAbuseController::class, 'show'])->name('report-abuse');
 Route::post('/report-abuse', [ReportAbuseController::class, 'submit'])
-    ->middleware('throttle:5,1')
+    ->middleware('throttle:5,1,report-abuse')
     ->name('report-abuse.submit');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
@@ -83,7 +83,8 @@ Route::get('/go/{code}', [LinkController::class, 'go'])
     ->where('code', '[A-Za-z0-9_-]{3,30}');
 
 Route::post('/{code}/unlock', [LinkController::class, 'unlock'])
-    ->where('code', '[A-Za-z0-9_-]{3,30}');
+    ->where('code', '[A-Za-z0-9_-]{3,30}')
+    ->middleware('throttle:10,1,unlock');
 
 Route::get('/{code}', [LinkController::class, 'show'])
     ->where('code', '[A-Za-z0-9_-]{3,30}');
