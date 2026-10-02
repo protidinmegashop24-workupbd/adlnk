@@ -1,7 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'My Links — klikwit')
-@section('page-class', 'wide')
 
 @section('content')
   <h1>My Links</h1>

@@ -4,9 +4,7 @@
 @section('description', 'Create short, shareable links, generate QR codes, track clicks, and manage your links—all in one simple platform.')
 @section('page-class', 'wide')
 @section('extra-style')
-  .hero-wrap{max-width:560px;margin:0 auto}
-  .hero-h1{font-size:1.7rem;text-align:center;margin-bottom:8px;line-height:1.3}
-  .hero-sub{text-align:center;color:#555;font-size:15px;margin-top:0}
+  .hero-wrap{max-width:560px;margin:-60px auto 0}
   .trust-strip{text-align:center;color:#888;font-size:13px;margin-top:16px}
   .section{margin-top:48px}
   .section h2{text-align:center;font-size:1.4rem;margin-bottom:20px}
@@ -29,11 +27,13 @@
   .final-cta a.cta-btn{display:inline-block;background:#fff;color:#0d6efd;padding:12px 28px;border-radius:6px;font-weight:bold;text-decoration:none;margin-top:8px}
 @endsection
 
+@section('hero')
+  <h1>Short Links. Simple Tools. Free to Use.</h1>
+  <p>Create short, shareable links, generate QR codes, track clicks, and manage your links—all in one simple platform.</p>
+@endsection
+
 @section('content')
 <div class="hero-wrap" id="shortener">
-  <h1 class="hero-h1">Short Links. Simple Tools. Free to Use.</h1>
-  <p class="hero-sub">Create short, shareable links, generate QR codes, track clicks, and manage your links—all in one simple platform.</p>
-
   <div class="tabs">
     <button class="tab active" id="tab-single" type="button">Single Link</button>
     <button class="tab" id="tab-bulk" type="button">Bulk Shorten</button>

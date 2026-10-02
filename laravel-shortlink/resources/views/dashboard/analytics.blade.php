@@ -1,7 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Link Analytics — klikwit')
-@section('page-class', 'wide')
 @section('extra-style')
   .stat-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
   .stat-box{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:16px 20px;flex:1;min-width:120px;text-align:center}

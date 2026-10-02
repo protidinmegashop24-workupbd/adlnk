@@ -1,7 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Link-in-Bio — klikwit')
-@section('page-class', 'wide')
 @section('extra-style')
   .link-row{display:flex;gap:8px;align-items:flex-start;margin-top:10px}
   .link-row input{margin-top:0}
