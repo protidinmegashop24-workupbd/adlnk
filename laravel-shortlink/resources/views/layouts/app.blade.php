@@ -25,6 +25,7 @@
   @media (max-width:480px){.nav a{margin-left:12px;font-size:14px}}
   .page{max-width:560px;margin:0 auto;padding:24px}
   .page.wide{max-width:800px}
+  .page.blog-wide{max-width:980px}
   h1{font-size:1.6rem;text-align:center}
   .hero-dark{background:linear-gradient(135deg,#0a1628,#102844);padding:56px 20px 90px;text-align:center}
   .hero-dark .hero-inner{max-width:680px;margin:0 auto}
