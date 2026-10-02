@@ -40,7 +40,7 @@ class LinkController extends Controller
             return response()->json(['error' => 'Password must be at least 4 characters.'], 422);
         }
 
-        $expiresAt = $this->parseExpiry($request->input('expires_at', ''));
+        $expiresAt = $this->parseExpiry((string) $request->input('expires_at', ''));
         if ($expiresAt === false) {
             return response()->json(['error' => 'Please enter a valid expiration date in the future.'], 422);
         }
