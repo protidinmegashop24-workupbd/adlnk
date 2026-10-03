@@ -10,8 +10,15 @@
 <meta property="og:site_name" content="klikwit"/>
 <meta property="og:title" content="@yield('title', 'klikwit — Free URL Shortener & QR Code Generator')"/>
 <meta property="og:description" content="@yield('description', 'Free URL shortener, custom links, QR code generator, and bulk link shortening — no signup required.')"/>
-<meta property="og:type" content="website"/>
+<meta property="og:type" content="@yield('og-type', 'website')"/>
 <meta property="og:url" content="{{ url()->current() }}"/>
+<meta property="og:image" content="@yield('og-image', asset('images/og-default.png'))"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="@yield('title', 'klikwit — Free URL Shortener & QR Code Generator')"/>
+<meta name="twitter:description" content="@yield('description', 'Free URL shortener, custom links, QR code generator, and bulk link shortening — no signup required.')"/>
+<meta name="twitter:image" content="@yield('og-image', asset('images/og-default.png'))"/>
 <style>
 @include('partials.base-style')
   .nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 0}

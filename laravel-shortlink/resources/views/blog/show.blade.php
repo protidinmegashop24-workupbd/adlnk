@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', $post->title.' — klikwit')
-@section('description', $post->excerpt)
+@section('title', ($post->meta_title ?: $post->title).' — klikwit')
+@section('description', $post->meta_description ?: $post->excerpt)
+@section('og-type', 'article')
+@section('og-image', asset($post->thumbnail ?? 'images/blog/default.png'))
 @section('page-class', 'blog-wide')
 @section('extra-style')
   .post-body{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:24px;margin-top:16px;line-height:1.7}
