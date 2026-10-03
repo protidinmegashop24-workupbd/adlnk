@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $post['title'].' — klikwit')
-@section('description', $post['excerpt'])
+@section('title', $post->title.' — klikwit')
+@section('description', $post->excerpt)
 @section('page-class', 'blog-wide')
 @section('extra-style')
   .post-body{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:24px;margin-top:16px;line-height:1.7}
@@ -17,13 +17,13 @@
   <div class="blog-layout">
     <div>
       <div class="post-card-meta">
-        <span class="post-date">{{ \Carbon\Carbon::parse($post['date'])->format('F j, Y') }}</span>
-        <a class="post-cat-badge" href="{{ route('blog.index', ['category' => $post['category']]) }}">{{ $post['category'] }}</a>
+        <span class="post-date">{{ $post->published_at?->format('F j, Y') }}</span>
+        <a class="post-cat-badge" href="{{ route('blog.index', ['category' => $post->category]) }}">{{ $post->category }}</a>
       </div>
-      <h1>{{ $post['title'] }}</h1>
-      <img class="post-hero" src="{{ asset($post['thumbnail']) }}" alt=""/>
+      <h1>{{ $post->title }}</h1>
+      <img class="post-hero" src="{{ asset($post->thumbnail ?? 'images/blog/default.png') }}" alt=""/>
       <div class="post-body">
-        @include('blog.posts.'.$post['slug'])
+        {!! $post->body !!}
       </div>
       <a class="back-link" href="{{ route('blog.index') }}">&laquo; Back to Blog</a>
     </div>
@@ -35,9 +35,9 @@
   {
     "@@context": "https://schema.org",
     "@@type": "Article",
-    "headline": @json($post['title']),
-    "datePublished": @json($post['date']),
-    "description": @json($post['excerpt'])
+    "headline": @json($post->title),
+    "datePublished": @json($post->published_at?->toIso8601String()),
+    "description": @json($post->excerpt)
   }
   </script>
 @endsection

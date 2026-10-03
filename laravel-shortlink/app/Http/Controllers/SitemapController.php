@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
@@ -50,8 +51,8 @@ class SitemapController extends Controller
             ['url' => route('report-abuse'), 'changefreq' => 'yearly', 'priority' => '0.3'],
         ];
 
-        foreach (BlogController::posts() as $post) {
-            $urls[] = ['url' => route('blog.show', $post['slug']), 'changefreq' => 'monthly', 'priority' => '0.6'];
+        foreach (BlogPost::published()->get() as $post) {
+            $urls[] = ['url' => route('blog.show', $post->slug), 'changefreq' => 'monthly', 'priority' => '0.6'];
         }
 
         return $urls;

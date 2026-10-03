@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BioPageController;
@@ -94,6 +95,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
     Route::post('/reports/{report}/disable-link', [AdminController::class, 'disableLink'])->name('admin.reports.disable');
     Route::post('/reports/{report}/dismiss', [AdminController::class, 'dismiss'])->name('admin.reports.dismiss');
+
+    Route::get('/blog', [BlogPostController::class, 'index'])->name('admin.blog.index');
+    Route::get('/blog/create', [BlogPostController::class, 'create'])->name('admin.blog.create');
+    Route::post('/blog', [BlogPostController::class, 'store'])->name('admin.blog.store');
+    Route::get('/blog/{post}/edit', [BlogPostController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/blog/{post}', [BlogPostController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/blog/{post}', [BlogPostController::class, 'destroy'])->name('admin.blog.destroy');
 });
 
 // Order matters: specific routes (above, and /go/{code} below) must be

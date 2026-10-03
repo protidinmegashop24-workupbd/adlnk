@@ -32,14 +32,14 @@
 
       @forelse ($posts as $post)
         <div class="post-card">
-          <img src="{{ asset($post['thumbnail']) }}" alt=""/>
+          <img src="{{ asset($post->thumbnail ?? 'images/blog/default.png') }}" alt=""/>
           <div class="post-card-body">
             <div class="post-card-meta">
-              <span class="post-date">{{ \Carbon\Carbon::parse($post['date'])->format('F j, Y') }}</span>
-              <a class="post-cat-badge" href="{{ route('blog.index', ['category' => $post['category']]) }}">{{ $post['category'] }}</a>
+              <span class="post-date">{{ $post->published_at?->format('F j, Y') }}</span>
+              <a class="post-cat-badge" href="{{ route('blog.index', ['category' => $post->category]) }}">{{ $post->category }}</a>
             </div>
-            <h2><a href="{{ route('blog.show', $post['slug']) }}">{{ $post['title'] }}</a></h2>
-            <p class="post-excerpt">{{ $post['excerpt'] }}</p>
+            <h2><a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a></h2>
+            <p class="post-excerpt">{{ $post->excerpt }}</p>
           </div>
         </div>
       @empty
