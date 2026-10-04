@@ -13,6 +13,13 @@
   .post-body a{color:#0d6efd}
   .post-hero{width:100%;max-height:320px;object-fit:cover;border-radius:8px;margin-top:16px}
   .back-link{display:inline-block;margin-top:20px;font-size:14px}
+  .comments-section{margin-top:24px}
+  .comments-section h2{margin-top:0;font-size:1.1rem}
+  .comment-item{border-top:1px solid #eee;padding:14px 0}
+  .comment-item .c-name{font-weight:bold;font-size:14px}
+  .comment-item .c-date{color:#888;font-size:12px;margin-bottom:6px}
+  .comment-item .c-body{font-size:14px;color:#333;white-space:pre-line}
+  .comment-honeypot{position:absolute;left:-9999px;top:auto}
 @endsection
 
 @section('content')
@@ -28,6 +35,44 @@
         {!! $post->body !!}
       </div>
       <a class="back-link" href="{{ route('blog.index') }}">&laquo; Back to Blog</a>
+
+      <div class="card comments-section" id="comments">
+        <h2>Comments ({{ $comments->count() }})</h2>
+
+        @forelse ($comments as $comment)
+          <div class="comment-item">
+            <div class="c-name">{{ $comment->name }}</div>
+            <div class="c-date">{{ $comment->created_at->format('F j, Y') }}</div>
+            <div class="c-body">{{ $comment->body }}</div>
+          </div>
+        @empty
+          <p class="muted" style="margin-top:0">No comments yet. Be the first to share your thoughts!</p>
+        @endforelse
+
+        <h3 style="font-size:15px;margin-top:20px">Leave a Comment</h3>
+
+        @if ($errors->any())
+          <div class="error">{{ $errors->first() }}</div>
+        @endif
+        @if (session('status'))
+          <div class="status">{{ session('status') }}</div>
+        @endif
+
+        <form method="POST" action="{{ route('blog.comments.store', $post->slug) }}">
+          @csrf
+          <div class="comment-honeypot" aria-hidden="true">
+            <label for="website">Leave this field blank</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"/>
+          </div>
+          <label for="comment_name">Name</label>
+          <input id="comment_name" type="text" name="name" value="{{ old('name') }}" required maxlength="100"/>
+          <label for="comment_email">Email <span class="hint" style="display:inline">(optional, never shown publicly)</span></label>
+          <input id="comment_email" type="email" name="email" value="{{ old('email') }}" maxlength="255"/>
+          <label for="comment_body">Comment</label>
+          <textarea id="comment_body" name="body" rows="4" required maxlength="2000">{{ old('body') }}</textarea>
+          <button type="submit">Post Comment</button>
+        </form>
+      </div>
     </div>
 
     @include('partials.blog-sidebar', ['activeCategory' => ''])

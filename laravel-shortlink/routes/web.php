@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogCommentController as AdminBlogCommentController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BioPageController;
+use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkController;
@@ -56,6 +58,10 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])
     ->where('slug', '[A-Za-z0-9_-]{3,80}')
     ->name('blog.show');
+Route::post('/blog/{slug}/comments', [BlogCommentController::class, 'store'])
+    ->where('slug', '[A-Za-z0-9_-]{3,80}')
+    ->middleware('throttle:5,1,blog-comment')
+    ->name('blog.comments.store');
 
 Route::get('/tools', [UrlToolsController::class, 'indexPage'])->name('tools.index');
 Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
@@ -102,6 +108,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/blog/{post}/edit', [BlogPostController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blog/{post}', [BlogPostController::class, 'update'])->name('admin.blog.update');
     Route::delete('/blog/{post}', [BlogPostController::class, 'destroy'])->name('admin.blog.destroy');
+
+    Route::get('/comments', [AdminBlogCommentController::class, 'index'])->name('admin.comments.index');
+    Route::post('/comments/{comment}/approve', [AdminBlogCommentController::class, 'approve'])->name('admin.comments.approve');
+    Route::delete('/comments/{comment}', [AdminBlogCommentController::class, 'destroy'])->name('admin.comments.destroy');
 });
 
 // Order matters: specific routes (above, and /go/{code} below) must be

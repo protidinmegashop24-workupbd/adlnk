@@ -47,6 +47,7 @@
       <a href="{{ route('tools.index') }}">🧰 <span class="label">Tools</span></a>
       @if (auth()->user()?->is_admin)
         <a href="{{ route('admin.blog.index') }}" class="{{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">✍️ <span class="label">Blog Posts</span></a>
+        <a href="{{ route('admin.comments.index') }}" class="{{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">💬 <span class="label">Comments</span></a>
         <a href="{{ route('admin.reports') }}" class="{{ request()->routeIs('admin.reports') ? 'active' : '' }}">🛡️ <span class="label">Abuse Reports</span></a>
       @endif
     </nav>

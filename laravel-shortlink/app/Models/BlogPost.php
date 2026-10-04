@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BlogPost extends Model
 {
@@ -26,5 +27,15 @@ class BlogPost extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(BlogComment::class);
+    }
+
+    public function approvedComments(): HasMany
+    {
+        return $this->comments()->where('approved', true)->oldest();
     }
 }

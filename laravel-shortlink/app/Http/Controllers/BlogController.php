@@ -57,6 +57,7 @@ class BlogController extends Controller
 
         return view('blog.show', [
             'post' => $post,
+            'comments' => $post->approvedComments,
             'latest' => $latest,
             'categories' => self::categories(),
         ]);
