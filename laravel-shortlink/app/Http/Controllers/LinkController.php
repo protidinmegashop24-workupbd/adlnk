@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use App\Services\SafeBrowsingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,6 +15,8 @@ class LinkController extends Controller
 
     private const RESERVED_CODES = ['api', 'go', 'favicon.ico', 'robots.txt', 'register', 'login', 'logout', 'dashboard', 'bio', 'u', 'sitemap.xml', 'blog', 'tools', 'about', 'contact', 'privacy-policy', 'terms', 'cookie-policy', 'acceptable-use-policy', 'dmca', 'report-abuse', 'admin', 'forgot-password', 'reset-password', 'profile', 'seo-tools'];
     private const MAX_BULK_LINKS = 20;
+
+    public function __construct(private SafeBrowsingService $safeBrowsing) {}
 
     /**
      * POST /api/shorten — create a short code (or custom alias) for a long URL.
@@ -32,6 +35,12 @@ class LinkController extends Controller
         if ($host !== null && strcasecmp($host, $request->getHost()) === 0) {
             return response()->json([
                 'error' => 'You cannot shorten a link to this site itself.',
+            ], 422);
+        }
+
+        if ($this->safeBrowsing->isUnsafe($longUrl)) {
+            return response()->json([
+                'error' => 'This link was flagged by Google Safe Browsing as unsafe (phishing/malware) and cannot be shortened.',
             ], 422);
         }
 
@@ -129,6 +138,10 @@ class LinkController extends Controller
         $host = parse_url($longUrl, PHP_URL_HOST);
         if ($host !== null && strcasecmp($host, $request->getHost()) === 0) {
             return ['url' => $longUrl, 'error' => 'Cannot shorten a link to this site itself.'];
+        }
+
+        if ($this->safeBrowsing->isUnsafe($longUrl)) {
+            return ['url' => $longUrl, 'error' => 'Flagged by Google Safe Browsing as unsafe (phishing/malware).'];
         }
 
         $code = null;

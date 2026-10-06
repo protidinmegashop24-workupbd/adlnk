@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BlogCommentController as AdminBlogCommentController;
 use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\LinkController as AdminLinkController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BioPageController;
@@ -112,6 +113,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/comments', [AdminBlogCommentController::class, 'index'])->name('admin.comments.index');
     Route::post('/comments/{comment}/approve', [AdminBlogCommentController::class, 'approve'])->name('admin.comments.approve');
     Route::delete('/comments/{comment}', [AdminBlogCommentController::class, 'destroy'])->name('admin.comments.destroy');
+
+    Route::get('/links', [AdminLinkController::class, 'index'])->name('admin.links.index');
+    Route::post('/links/{link}/disable', [AdminLinkController::class, 'disable'])->name('admin.links.disable');
+    Route::post('/links/{link}/enable', [AdminLinkController::class, 'enable'])->name('admin.links.enable');
 });
 
 // Order matters: specific routes (above, and /go/{code} below) must be
