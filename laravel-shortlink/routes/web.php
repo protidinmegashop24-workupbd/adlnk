@@ -85,6 +85,7 @@ Route::get('/tools/xml-sitemap-generator', [SeoToolsController::class, 'sitemapG
 Route::get('/tools/canonical-checker', [SeoToolsController::class, 'canonicalCheckerPage'])->name('seo-tools.canonical-checker');
 Route::get('/tools/open-graph-checker', [SeoToolsController::class, 'openGraphCheckerPage'])->name('seo-tools.open-graph-checker');
 Route::get('/tools/keyword-suggestions', [SeoToolsController::class, 'keywordSuggestionsPage'])->name('seo-tools.keyword-suggestions');
+Route::get('/tools/on-page-seo-checker', [SeoToolsController::class, 'onPageSeoCheckerPage'])->name('seo-tools.on-page-seo-checker');
 
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');

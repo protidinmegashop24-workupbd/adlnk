@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\Seo\CanonicalService;
 use App\Services\Seo\KeywordSuggestionService;
 use App\Services\Seo\MetaAnalyzerService;
+use App\Services\Seo\OnPageSeoService;
 use App\Services\Seo\OpenGraphService;
 use App\Services\SafeUrlResolver;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,7 @@ class SeoToolsController extends Controller
         private readonly CanonicalService $canonicalService,
         private readonly OpenGraphService $openGraphService,
         private readonly KeywordSuggestionService $keywordSuggestionService,
+        private readonly OnPageSeoService $onPageSeoService,
     ) {}
 
     public function hub(): View
@@ -79,6 +81,11 @@ class SeoToolsController extends Controller
     public function keywordSuggestionsPage(): View
     {
         return view('seo-tools.keyword-suggestions');
+    }
+
+    public function onPageSeoCheckerPage(): View
+    {
+        return view('seo-tools.on-page-seo-checker');
     }
 
     public function metaTagCheckerAnalyze(Request $request): JsonResponse
@@ -145,5 +152,31 @@ class SeoToolsController extends Controller
         }
 
         return response()->json(['seed' => $result['seed'], 'groups' => $result['groups']]);
+    }
+
+    public function onPageSeoCheckerAnalyze(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'url' => ['required', 'string', 'max:2048'],
+            'keyword' => ['nullable', 'string', 'max:80'],
+        ]);
+
+        $fetch = $this->resolver->fetchHtml(trim($data['url']));
+        if ($fetch['error']) {
+            return response()->json(['error' => $fetch['error']], 422);
+        }
+
+        $parsed = $this->metaAnalyzer->parse($fetch['html']);
+        $keyword = isset($data['keyword']) && trim($data['keyword']) !== '' ? trim($data['keyword']) : null;
+
+        $checks = array_merge(
+            $this->metaAnalyzer->evaluate($parsed),
+            $this->onPageSeoService->check($fetch['html'], $fetch['final_url'], $parsed, $keyword),
+        );
+
+        return response()->json([
+            'final_url' => $fetch['final_url'],
+            'checks' => $checks,
+        ]);
     }
 }

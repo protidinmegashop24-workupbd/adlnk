@@ -122,6 +122,11 @@
       <h2>Open Graph Checker</h2>
       <p>Check social share tags and preview a share.</p>
     </a>
+    <a class="tool-card" href="{{ route('seo-tools.on-page-seo-checker') }}">
+      <div class="icon">📋</div>
+      <h2>On-Page SEO Checker</h2>
+      <p>A full on-page SEO pass in one go.</p>
+    </a>
   </div>
   <p class="muted"><a href="{{ route('seo-tools.index') }}">See the full SEO Tools page</a></p>
 @endsection

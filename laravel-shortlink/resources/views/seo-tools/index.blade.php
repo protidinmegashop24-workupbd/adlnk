@@ -57,6 +57,12 @@
         <p>Check Open Graph and Twitter/X card tags, with a preview of how a share might look.</p>
         <a class="use-btn" href="{{ route('seo-tools.open-graph-checker') }}">Check Open Graph</a>
       </div>
+      <div class="seo-tool-card">
+        <div class="icon">📋</div>
+        <h3>On-Page SEO Checker</h3>
+        <p>A full on-page pass in one go: titles, headings, word count, alt text, links and keyword usage.</p>
+        <a class="use-btn" href="{{ route('seo-tools.on-page-seo-checker') }}">Run Check</a>
+      </div>
     </div>
   </div>
 

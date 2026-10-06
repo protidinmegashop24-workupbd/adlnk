@@ -38,12 +38,27 @@
   .hero-dark .hero-inner{max-width:680px;margin:0 auto}
   .hero-dark h1{color:#fff;font-size:2.25rem;margin:0 0 14px;line-height:1.25;text-align:center}
   .hero-dark p{color:#c3cedd;font-size:17px;margin:0}
-  .site-footer{background:#fff;border-top:1px solid #e5e7eb;margin-top:48px;padding:32px 24px}
-  .footer-inner{max-width:800px;margin:0 auto}
-  .footer-links{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:center}
-  .footer-links a{color:#666;text-decoration:none;font-size:14px}
-  .footer-links a:hover{color:#0d6efd}
-  .footer-copy{text-align:center;color:#999;font-size:13px;margin-top:16px}
+  .site-footer{background:#fff;border-top:1px solid #e5e7eb;margin-top:48px;padding:44px 24px 24px}
+  .footer-inner{max-width:1040px;margin:0 auto}
+  .footer-grid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:28px}
+  .footer-brand .footer-logo{display:inline-flex;align-items:center;gap:8px;font-size:1.15rem;font-weight:bold;color:#222;text-decoration:none}
+  .footer-brand p{color:#888;font-size:13px;margin:10px 0 0;max-width:220px;line-height:1.5}
+  .footer-col h4{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#999;margin:0 0 14px}
+  .footer-col{display:flex;flex-direction:column;gap:10px}
+  .footer-col a{color:#555;text-decoration:none;font-size:14px}
+  .footer-col a:hover{color:#0d6efd}
+  .footer-bottom{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center;border-top:1px solid #f0f0f0;margin-top:36px;padding-top:20px}
+  .footer-copy{color:#999;font-size:13px;margin:0}
+  .footer-bottom-links{display:flex;flex-wrap:wrap;gap:4px 18px}
+  .footer-bottom-links a{color:#888;text-decoration:none;font-size:13px}
+  .footer-bottom-links a:hover{color:#0d6efd}
+  @media (max-width:800px){
+    .footer-grid{grid-template-columns:repeat(2,1fr)}
+    .footer-brand{grid-column:1 / -1}
+  }
+  @media (max-width:480px){
+    .footer-grid{grid-template-columns:1fr}
+  }
   .nav-profile{position:relative;display:inline-block;margin-left:20px}
   .avatar{width:32px;height:32px;border-radius:50%;background:#0d6efd;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;border:0;font-size:14px;margin:0;padding:0;vertical-align:middle}
   .profile-dropdown{position:absolute;top:42px;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);min-width:200px;display:none;z-index:20;overflow:hidden;text-align:left}
@@ -111,19 +126,50 @@
 </div>
 <div class="site-footer">
   <div class="footer-inner">
-    <div class="footer-links">
-      <a href="{{ route('pages.about') }}">About</a>
-      <a href="{{ route('pages.contact') }}">Contact</a>
-      <a href="{{ route('blog.index') }}">Blog</a>
-      <a href="{{ route('tools.index') }}">Tools</a>
-      <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
-      <a href="{{ route('pages.terms') }}">Terms of Service</a>
-      <a href="{{ route('pages.cookies') }}">Cookie Policy</a>
-      <a href="{{ route('pages.aup') }}">Acceptable Use Policy</a>
-      <a href="{{ route('pages.dmca') }}">DMCA / Copyright</a>
-      <a href="{{ route('report-abuse') }}">Report Abuse</a>
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a class="footer-logo" href="{{ route('home') }}">
+          <img src="{{ asset('images/logo-mark.png') }}" alt="" width="22" height="22"/>
+          <span>klikwit</span>
+        </a>
+        <p>Free URL shortener, QR codes and SEO tools — no signup required.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="{{ route('pages.about') }}">About</a>
+        <a href="{{ route('pages.contact') }}">Contact</a>
+        <a href="{{ route('blog.index') }}">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Link Tools</h4>
+        <a href="{{ route('home') }}">URL Shortener</a>
+        <a href="{{ route('home') }}">QR Code Generator</a>
+        <a href="{{ route('bio.edit') }}">Link-in-Bio</a>
+        <a href="{{ route('dashboard') }}">Link Analytics</a>
+      </div>
+      <div class="footer-col">
+        <h4>SEO Tools</h4>
+        <a href="{{ route('seo-tools.index') }}">All SEO Tools</a>
+        <a href="{{ route('seo-tools.keyword-suggestions') }}">Keyword Suggestions</a>
+        <a href="{{ route('seo-tools.meta-tag-checker') }}">Meta Tag Checker</a>
+        <a href="{{ route('seo-tools.serp-preview') }}">SERP Preview</a>
+      </div>
+      <div class="footer-col">
+        <h4>Reach Out</h4>
+        <a href="mailto:support@klikwit.com">support@klikwit.com</a>
+        <a href="{{ route('report-abuse') }}">Report Abuse</a>
+      </div>
     </div>
-    <p class="footer-copy">&copy; {{ date('Y') }} klikwit. All rights reserved.</p>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; {{ date('Y') }} klikwit. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="{{ route('pages.privacy') }}">Privacy Policy</a>
+        <a href="{{ route('pages.terms') }}">Terms of Service</a>
+        <a href="{{ route('pages.cookies') }}">Cookie Policy</a>
+        <a href="{{ route('pages.aup') }}">Acceptable Use Policy</a>
+        <a href="{{ route('pages.dmca') }}">DMCA / Copyright</a>
+      </div>
+    </div>
   </div>
 </div>
 <script>

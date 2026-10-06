@@ -24,6 +24,7 @@
       <a href="{{ route('seo-tools.xml-sitemap-generator') }}">XML Sitemap Generator</a>
       <a href="{{ route('seo-tools.canonical-checker') }}">Canonical Checker</a>
       <a href="{{ route('seo-tools.open-graph-checker') }}">Open Graph Checker</a>
+      <a href="{{ route('seo-tools.on-page-seo-checker') }}">On-Page SEO Checker</a>
     </div>
   </div>
 </div>

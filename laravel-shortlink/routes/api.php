@@ -37,3 +37,4 @@ Route::post('/seo/open-graph-checker', [SeoToolsController::class, 'openGraphChe
 // Keyword Suggestions fires several outbound requests per submission (one
 // per modifier), so it gets a tighter budget than the single-fetch tools above.
 Route::post('/seo/keyword-suggestions', [SeoToolsController::class, 'keywordSuggestionsAnalyze'])->middleware('throttle:8,1,seo-keyword-suggestions');
+Route::post('/seo/on-page-checker', [SeoToolsController::class, 'onPageSeoCheckerAnalyze'])->middleware('throttle:15,1,seo-on-page');
