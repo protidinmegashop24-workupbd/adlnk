@@ -67,6 +67,11 @@
   <h2 style="margin-top:40px;font-size:1.2rem">SEO Tools</h2>
   <p class="muted" style="margin-top:0">Check your pages, preview search snippets, and generate technical SEO files.</p>
   <div class="tool-grid">
+    <a class="tool-card" href="{{ route('seo-tools.keyword-suggestions') }}">
+      <div class="icon">💡</div>
+      <h2>Keyword Suggestions</h2>
+      <p>Find related searches from real Google autocomplete data.</p>
+    </a>
     <a class="tool-card" href="{{ route('seo-tools.meta-tag-checker') }}">
       <div class="icon">🔍</div>
       <h2>Meta Tag Checker</h2>

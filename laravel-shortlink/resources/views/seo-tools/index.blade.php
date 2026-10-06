@@ -61,6 +61,18 @@
   </div>
 
   <div class="seo-cat">
+    <h2>Keyword Research</h2>
+    <div class="seo-tool-grid">
+      <div class="seo-tool-card">
+        <div class="icon">💡</div>
+        <h3>Keyword Suggestions</h3>
+        <p>Find related searches for any topic, pulled from real Google autocomplete data.</p>
+        <a class="use-btn" href="{{ route('seo-tools.keyword-suggestions') }}">Find Keywords</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="seo-cat">
     <h2>Content SEO</h2>
     <div class="seo-tool-grid">
       <div class="seo-tool-card">

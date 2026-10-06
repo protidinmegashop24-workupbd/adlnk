@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Seo\CanonicalService;
+use App\Services\Seo\KeywordSuggestionService;
 use App\Services\Seo\MetaAnalyzerService;
 use App\Services\Seo\OpenGraphService;
 use App\Services\SafeUrlResolver;
@@ -17,6 +18,7 @@ class SeoToolsController extends Controller
         private readonly MetaAnalyzerService $metaAnalyzer,
         private readonly CanonicalService $canonicalService,
         private readonly OpenGraphService $openGraphService,
+        private readonly KeywordSuggestionService $keywordSuggestionService,
     ) {}
 
     public function hub(): View
@@ -74,6 +76,11 @@ class SeoToolsController extends Controller
         return view('seo-tools.open-graph-checker');
     }
 
+    public function keywordSuggestionsPage(): View
+    {
+        return view('seo-tools.keyword-suggestions');
+    }
+
     public function metaTagCheckerAnalyze(Request $request): JsonResponse
     {
         $data = $request->validate(['url' => ['required', 'string', 'max:2048']]);
@@ -125,5 +132,18 @@ class SeoToolsController extends Controller
             'checks' => $this->openGraphService->check($parsed),
             'preview' => $this->openGraphService->previewData($parsed),
         ]);
+    }
+
+    public function keywordSuggestionsAnalyze(Request $request): JsonResponse
+    {
+        $data = $request->validate(['keyword' => ['required', 'string', 'max:80']]);
+
+        $result = $this->keywordSuggestionService->suggest($data['keyword']);
+
+        if ($result['error']) {
+            return response()->json(['error' => $result['error']], 422);
+        }
+
+        return response()->json(['seed' => $result['seed'], 'groups' => $result['groups']]);
     }
 }

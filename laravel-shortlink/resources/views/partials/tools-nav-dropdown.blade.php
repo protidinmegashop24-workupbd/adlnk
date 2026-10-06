@@ -13,6 +13,7 @@
     <div class="nav-dropdown-col">
       <div class="nav-dropdown-heading">SEO Tools</div>
       <a href="{{ route('seo-tools.index') }}">SEO Tools</a>
+      <a href="{{ route('seo-tools.keyword-suggestions') }}">Keyword Suggestions</a>
       <a href="{{ route('seo-tools.meta-tag-checker') }}">Meta Tag Checker</a>
       <a href="{{ route('seo-tools.serp-preview') }}">SERP Preview</a>
       <a href="{{ route('seo-tools.keyword-density-checker') }}">Keyword Density Checker</a>

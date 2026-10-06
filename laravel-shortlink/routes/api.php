@@ -33,3 +33,7 @@ Route::post('/check', [UrlToolsController::class, 'check'])->middleware('throttl
 Route::post('/seo/meta-tag-checker', [SeoToolsController::class, 'metaTagCheckerAnalyze'])->middleware('throttle:15,1,seo-meta');
 Route::post('/seo/canonical-checker', [SeoToolsController::class, 'canonicalCheckerAnalyze'])->middleware('throttle:15,1,seo-canonical');
 Route::post('/seo/open-graph-checker', [SeoToolsController::class, 'openGraphCheckerAnalyze'])->middleware('throttle:15,1,seo-og');
+
+// Keyword Suggestions fires several outbound requests per submission (one
+// per modifier), so it gets a tighter budget than the single-fetch tools above.
+Route::post('/seo/keyword-suggestions', [SeoToolsController::class, 'keywordSuggestionsAnalyze'])->middleware('throttle:8,1,seo-keyword-suggestions');

@@ -40,6 +40,7 @@ class SitemapController extends Controller
             ['url' => route('seo-tools.xml-sitemap-generator'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('seo-tools.canonical-checker'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('seo-tools.open-graph-checker'), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('seo-tools.keyword-suggestions'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('blog.index'), 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['url' => route('pages.about'), 'changefreq' => 'yearly', 'priority' => '0.4'],
             ['url' => route('pages.contact'), 'changefreq' => 'yearly', 'priority' => '0.4'],
