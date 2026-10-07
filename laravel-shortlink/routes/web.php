@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportAbuseController;
 use App\Http\Controllers\SeoToolsController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SpeedTestController;
 use App\Http\Controllers\UrlToolsController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +69,7 @@ Route::get('/tools', [UrlToolsController::class, 'indexPage'])->name('tools.inde
 Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('tools.expand');
 Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
 Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])->name('tools.utm');
+Route::get('/tools/speed-test', [SpeedTestController::class, 'page'])->name('tools.speed-test');
 
 // SEO Tools (Phase 2) — the hub plus one page per tool. The three that need
 // to fetch another site's HTML (meta/canonical/open-graph) also register a
@@ -86,6 +88,7 @@ Route::get('/tools/canonical-checker', [SeoToolsController::class, 'canonicalChe
 Route::get('/tools/open-graph-checker', [SeoToolsController::class, 'openGraphCheckerPage'])->name('seo-tools.open-graph-checker');
 Route::get('/tools/keyword-suggestions', [SeoToolsController::class, 'keywordSuggestionsPage'])->name('seo-tools.keyword-suggestions');
 Route::get('/tools/on-page-seo-checker', [SeoToolsController::class, 'onPageSeoCheckerPage'])->name('seo-tools.on-page-seo-checker');
+Route::get('/tools/page-speed-checker', [SeoToolsController::class, 'pageSpeedCheckerPage'])->name('seo-tools.page-speed-checker');
 
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');

@@ -9,6 +9,7 @@
       <a href="{{ route('dashboard') }}">Link Analytics</a>
       <a href="{{ route('home') }}">Custom Links</a>
       <a href="{{ route('bio.edit') }}">Link-in-Bio</a>
+      <a href="{{ route('tools.speed-test') }}">Internet Speed Test</a>
     </div>
     <div class="nav-dropdown-col">
       <div class="nav-dropdown-heading">SEO Tools</div>
@@ -25,6 +26,7 @@
       <a href="{{ route('seo-tools.canonical-checker') }}">Canonical Checker</a>
       <a href="{{ route('seo-tools.open-graph-checker') }}">Open Graph Checker</a>
       <a href="{{ route('seo-tools.on-page-seo-checker') }}">On-Page SEO Checker</a>
+      <a href="{{ route('seo-tools.page-speed-checker') }}">Page Speed Checker</a>
     </div>
   </div>
 </div>

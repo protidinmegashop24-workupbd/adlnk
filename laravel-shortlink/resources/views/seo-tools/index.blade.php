@@ -63,6 +63,12 @@
         <p>A full on-page pass in one go: titles, headings, word count, alt text, links and keyword usage.</p>
         <a class="use-btn" href="{{ route('seo-tools.on-page-seo-checker') }}">Run Check</a>
       </div>
+      <div class="seo-tool-card">
+        <div class="icon">⚡</div>
+        <h3>Page Speed Checker</h3>
+        <p>Real performance score and Core Web Vitals, powered by Google PageSpeed Insights.</p>
+        <a class="use-btn" href="{{ route('seo-tools.page-speed-checker') }}">Check Speed</a>
+      </div>
     </div>
   </div>
 

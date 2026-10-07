@@ -39,4 +39,8 @@ return [
         'key' => env('GOOGLE_SAFE_BROWSING_API_KEY'),
     ],
 
+    'pagespeed' => [
+        'key' => env('GOOGLE_PAGESPEED_API_KEY'),
+    ],
+
 ];

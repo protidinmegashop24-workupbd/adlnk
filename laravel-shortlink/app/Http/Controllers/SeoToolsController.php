@@ -7,6 +7,7 @@ use App\Services\Seo\KeywordSuggestionService;
 use App\Services\Seo\MetaAnalyzerService;
 use App\Services\Seo\OnPageSeoService;
 use App\Services\Seo\OpenGraphService;
+use App\Services\Seo\PageSpeedService;
 use App\Services\SafeUrlResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class SeoToolsController extends Controller
         private readonly OpenGraphService $openGraphService,
         private readonly KeywordSuggestionService $keywordSuggestionService,
         private readonly OnPageSeoService $onPageSeoService,
+        private readonly PageSpeedService $pageSpeedService,
     ) {}
 
     public function hub(): View
@@ -86,6 +88,11 @@ class SeoToolsController extends Controller
     public function onPageSeoCheckerPage(): View
     {
         return view('seo-tools.on-page-seo-checker');
+    }
+
+    public function pageSpeedCheckerPage(): View
+    {
+        return view('seo-tools.page-speed-checker');
     }
 
     public function metaTagCheckerAnalyze(Request $request): JsonResponse
@@ -178,5 +185,21 @@ class SeoToolsController extends Controller
             'final_url' => $fetch['final_url'],
             'checks' => $checks,
         ]);
+    }
+
+    public function pageSpeedCheckerAnalyze(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'url' => ['required', 'string', 'max:2048', 'regex:#^https?://#i'],
+            'strategy' => ['nullable', 'string', 'in:mobile,desktop'],
+        ]);
+
+        $result = $this->pageSpeedService->analyze(trim($data['url']), $data['strategy'] ?? 'mobile');
+
+        if ($result['error']) {
+            return response()->json(['error' => $result['error']], 422);
+        }
+
+        return response()->json($result);
     }
 }

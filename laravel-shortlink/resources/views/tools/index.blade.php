@@ -62,6 +62,11 @@
       <h2>Link Checker</h2>
       <p>Check whether a link is live or broken.</p>
     </a>
+    <a class="tool-card" href="{{ route('tools.speed-test') }}">
+      <div class="icon">🌐</div>
+      <h2>Internet Speed Test</h2>
+      <p>Test your connection's download, upload and latency.</p>
+    </a>
   </div>
 
   <h2 style="margin-top:40px;font-size:1.2rem">SEO Tools</h2>
@@ -126,6 +131,11 @@
       <div class="icon">📋</div>
       <h2>On-Page SEO Checker</h2>
       <p>A full on-page SEO pass in one go.</p>
+    </a>
+    <a class="tool-card" href="{{ route('seo-tools.page-speed-checker') }}">
+      <div class="icon">⚡</div>
+      <h2>Page Speed Checker</h2>
+      <p>Real performance score via Google PageSpeed Insights.</p>
     </a>
   </div>
   <p class="muted"><a href="{{ route('seo-tools.index') }}">See the full SEO Tools page</a></p>

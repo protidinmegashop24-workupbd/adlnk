@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\SeoToolsController;
+use App\Http\Controllers\SpeedTestController;
 use App\Http\Controllers\UrlToolsController;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Session\Middleware\StartSession;
@@ -38,3 +39,13 @@ Route::post('/seo/open-graph-checker', [SeoToolsController::class, 'openGraphChe
 // per modifier), so it gets a tighter budget than the single-fetch tools above.
 Route::post('/seo/keyword-suggestions', [SeoToolsController::class, 'keywordSuggestionsAnalyze'])->middleware('throttle:8,1,seo-keyword-suggestions');
 Route::post('/seo/on-page-checker', [SeoToolsController::class, 'onPageSeoCheckerAnalyze'])->middleware('throttle:15,1,seo-on-page');
+
+// PageSpeed calls out to Google's own API (which itself takes several
+// seconds per run), so it gets a tighter budget than the single-fetch tools.
+Route::post('/seo/page-speed-checker', [SeoToolsController::class, 'pageSpeedCheckerAnalyze'])->middleware('throttle:6,1,seo-pagespeed');
+
+// Internet Speed Test — moves real bytes (up to ~10MB per download call),
+// so both directions are throttled tighter than the lightweight API tools
+// above to keep bandwidth use from a single visitor's repeated testing bounded.
+Route::get('/speedtest/download', [SpeedTestController::class, 'download'])->middleware('throttle:20,1,speedtest-download');
+Route::post('/speedtest/upload', [SpeedTestController::class, 'upload'])->middleware('throttle:20,1,speedtest-upload');
