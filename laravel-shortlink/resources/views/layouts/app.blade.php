@@ -7,6 +7,7 @@
 <title>@yield('title', 'klikwit — Free URL Shortener & QR Code Generator')</title>
 <link rel="canonical" href="{{ url()->current() }}"/>
 @include('partials.favicons')
+@include('partials.google-analytics')
 <meta property="og:site_name" content="klikwit"/>
 <meta property="og:title" content="@yield('title', 'klikwit — Free URL Shortener & QR Code Generator')"/>
 <meta property="og:description" content="@yield('description', 'Free URL shortener, custom links, QR code generator, and bulk link shortening — no signup required.')"/>
