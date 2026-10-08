@@ -27,6 +27,8 @@
       <a href="{{ route('seo-tools.open-graph-checker') }}">Open Graph Checker</a>
       <a href="{{ route('seo-tools.on-page-seo-checker') }}">On-Page SEO Checker</a>
       <a href="{{ route('seo-tools.page-speed-checker') }}">Page Speed Checker</a>
+      <a href="{{ route('tools.youtube-tag-generator') }}">YouTube Tag & Title Generator</a>
+      <a href="{{ route('tools.image-compressor') }}">Image Compressor</a>
     </div>
   </div>
 </div>

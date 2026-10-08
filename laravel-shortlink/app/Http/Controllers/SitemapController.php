@@ -31,6 +31,8 @@ class SitemapController extends Controller
             ['url' => route('tools.check'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('tools.utm'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('tools.speed-test'), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('tools.youtube-tag-generator'), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('tools.image-compressor'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('seo-tools.meta-tag-checker'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('seo-tools.serp-preview'), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('seo-tools.keyword-density-checker'), 'changefreq' => 'monthly', 'priority' => '0.7'],

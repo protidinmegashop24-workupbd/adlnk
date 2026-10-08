@@ -67,6 +67,16 @@
       <h2>Internet Speed Test</h2>
       <p>Test your connection's download, upload and latency.</p>
     </a>
+    <a class="tool-card" href="{{ route('tools.youtube-tag-generator') }}">
+      <div class="icon">▶️</div>
+      <h2>YouTube Tag & Title Generator</h2>
+      <p>Real tags from YouTube search data, plus title ideas.</p>
+    </a>
+    <a class="tool-card" href="{{ route('tools.image-compressor') }}">
+      <div class="icon">🖼️</div>
+      <h2>Image Compressor</h2>
+      <p>Compress images and convert to WebP.</p>
+    </a>
   </div>
 
   <h2 style="margin-top:40px;font-size:1.2rem">SEO Tools</h2>

@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\SeoToolsController;
+use App\Http\Controllers\ImageToolsController;
 use App\Http\Controllers\SpeedTestController;
 use App\Http\Controllers\UrlToolsController;
+use App\Http\Controllers\YoutubeToolsController;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
@@ -49,3 +51,9 @@ Route::post('/seo/page-speed-checker', [SeoToolsController::class, 'pageSpeedChe
 // above to keep bandwidth use from a single visitor's repeated testing bounded.
 Route::get('/speedtest/download', [SpeedTestController::class, 'download'])->middleware('throttle:20,1,speedtest-download');
 Route::post('/speedtest/upload', [SpeedTestController::class, 'upload'])->middleware('throttle:20,1,speedtest-upload');
+
+Route::post('/youtube/generate', [YoutubeToolsController::class, 'generate'])->middleware('throttle:10,1,youtube-generate');
+
+// Image compression is CPU/memory-heavier per request than the text-based
+// tools above, so it gets a tighter budget.
+Route::post('/image/compress', [ImageToolsController::class, 'compress'])->middleware('throttle:10,1,image-compress');

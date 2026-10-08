@@ -31,9 +31,14 @@ class KeywordSuggestionService
     private const MODIFIERS = ['how', 'what', 'why', 'best', 'vs', 'for', 'near me', 'free', 'alternative'];
 
     /**
+     * @param  ?string  $dataset  null for general web suggestions, 'yt' to scope
+     *                            suggestions to YouTube search data instead
+     *                            (Google's suggest endpoint supports this via
+     *                            the same "ds" parameter YouTube's own search
+     *                            box uses).
      * @return array{seed: string, groups: array<string, array<int, string>>, error: ?string}
      */
-    public function suggest(string $seed): array
+    public function suggest(string $seed, ?string $dataset = null): array
     {
         $seed = trim($seed);
 
@@ -47,13 +52,14 @@ class KeywordSuggestionService
         }
 
         try {
-            $responses = Http::pool(function ($pool) use ($queries) {
+            $responses = Http::pool(function ($pool) use ($queries, $dataset) {
                 $requests = [];
                 foreach ($queries as $label => $query) {
-                    $requests[] = $pool->as($label)->timeout(self::TIMEOUT_SECONDS)->get(self::ENDPOINT, [
-                        'client' => 'firefox',
-                        'q' => $query,
-                    ]);
+                    $params = ['client' => 'firefox', 'q' => $query];
+                    if ($dataset !== null) {
+                        $params['ds'] = $dataset;
+                    }
+                    $requests[] = $pool->as($label)->timeout(self::TIMEOUT_SECONDS)->get(self::ENDPOINT, $params);
                 }
 
                 return $requests;

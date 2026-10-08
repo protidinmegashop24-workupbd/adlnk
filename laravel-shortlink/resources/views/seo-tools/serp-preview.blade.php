@@ -9,6 +9,8 @@
   .serp-preview-card.mobile .sp-title{font-size:16px}
   .serp-preview-card .sp-title-text,.serp-preview-card .sp-desc-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .serp-preview-card .sp-title-text{-webkit-line-clamp:1}
+  .char-count.good{color:#1a7f37}
+  .char-count.warn{color:#b8860b}
 @endsection
 
 @section('content')
@@ -20,7 +22,7 @@
   ]])
 
   <h1>SERP Preview Tool</h1>
-  <p>See a visual preview of how your title and description might look as a search result snippet, on both desktop and mobile widths.</p>
+  <p>See a visual preview of how your title and description might look as a search result snippet, on both desktop and mobile widths — with a live character-length check so you know before publishing whether either is likely to get cut off.</p>
 
   <div class="card">
     <label for="serpUrl">URL</label>
@@ -109,8 +111,16 @@
 
     pTitle.textContent = title || 'Your title will appear here';
     pDesc.textContent = desc || 'Your meta description will appear here.';
-    titleCount.textContent = title.length + ' characters';
-    descCount.textContent = desc.length + ' characters';
+
+    var titleLen = title.length;
+    var titleGood = titleLen > 0 && titleLen <= 60 && titleLen >= 10;
+    titleCount.textContent = titleLen + ' characters' + (titleLen > 0 ? (titleGood ? ' — good length' : (titleLen > 60 ? ' — may get cut off' : ' — quite short')) : '');
+    titleCount.className = 'char-count' + (titleLen > 0 ? (titleGood ? ' good' : ' warn') : '');
+
+    var descLen = desc.length;
+    var descGood = descLen > 0 && descLen <= 160 && descLen >= 50;
+    descCount.textContent = descLen + ' characters' + (descLen > 0 ? (descGood ? ' — good length' : (descLen > 160 ? ' — may get cut off' : ' — quite short')) : '');
+    descCount.className = 'char-count' + (descLen > 0 ? (descGood ? ' good' : ' warn') : '');
 
     try {
       var u = new URL(url);

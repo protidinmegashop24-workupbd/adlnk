@@ -85,6 +85,18 @@
   </div>
 
   <div class="seo-cat">
+    <h2>YouTube Tools</h2>
+    <div class="seo-tool-grid">
+      <div class="seo-tool-card">
+        <div class="icon">▶️</div>
+        <h3>YouTube Tag & Title Generator</h3>
+        <p>Real tag suggestions from YouTube search data, plus formula-based title ideas.</p>
+        <a class="use-btn" href="{{ route('tools.youtube-tag-generator') }}">Generate</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="seo-cat">
     <h2>Content SEO</h2>
     <div class="seo-tool-grid">
       <div class="seo-tool-card">
@@ -140,6 +152,12 @@
         <h3>Slug Generator</h3>
         <p>Turn a title into a clean, URL-friendly slug.</p>
         <a class="use-btn" href="{{ route('seo-tools.slug-generator') }}">Generate Slug</a>
+      </div>
+      <div class="seo-tool-card">
+        <div class="icon">🖼️</div>
+        <h3>Image Compressor</h3>
+        <p>Compress images and convert to WebP for faster-loading pages.</p>
+        <a class="use-btn" href="{{ route('tools.image-compressor') }}">Compress Image</a>
       </div>
     </div>
   </div>

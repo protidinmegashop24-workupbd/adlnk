@@ -15,8 +15,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportAbuseController;
 use App\Http\Controllers\SeoToolsController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ImageToolsController;
 use App\Http\Controllers\SpeedTestController;
 use App\Http\Controllers\UrlToolsController;
+use App\Http\Controllers\YoutubeToolsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -70,6 +72,8 @@ Route::get('/tools/expand', [UrlToolsController::class, 'expandPage'])->name('to
 Route::get('/tools/check', [UrlToolsController::class, 'checkPage'])->name('tools.check');
 Route::get('/tools/utm-builder', [UrlToolsController::class, 'utmBuilderPage'])->name('tools.utm');
 Route::get('/tools/speed-test', [SpeedTestController::class, 'page'])->name('tools.speed-test');
+Route::get('/tools/youtube-tag-generator', [YoutubeToolsController::class, 'page'])->name('tools.youtube-tag-generator');
+Route::get('/tools/image-compressor', [ImageToolsController::class, 'page'])->name('tools.image-compressor');
 
 // SEO Tools (Phase 2) — the hub plus one page per tool. The three that need
 // to fetch another site's HTML (meta/canonical/open-graph) also register a
