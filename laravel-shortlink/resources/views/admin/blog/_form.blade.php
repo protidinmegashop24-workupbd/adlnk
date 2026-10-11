@@ -67,28 +67,27 @@
 @endif
 <input id="thumbnail_upload" type="file" name="thumbnail_upload" accept="image/*"/>
 
-<label for="body">Post Content</label>
-<div style="display:flex;gap:18px;margin:4px 0 10px">
-  <label style="display:flex;align-items:center;gap:6px;font-weight:normal;margin:0">
-    <input type="radio" name="body_mode" value="text" class="body-mode-input" style="width:auto" {{ old('body_mode', $post->body_mode ?? 'text') === 'text' ? 'checked' : '' }}/>
-    ✍️ সাধারণ লেখা (Plain Text)
-  </label>
-  <label style="display:flex;align-items:center;gap:6px;font-weight:normal;margin:0">
-    <input type="radio" name="body_mode" value="html" class="body-mode-input" style="width:auto" {{ old('body_mode', $post->body_mode ?? 'text') === 'html' ? 'checked' : '' }}/>
-    💻 HTML কোড (Advanced)
-  </label>
-</div>
+<link rel="stylesheet" href="{{ asset('vendor/quill/quill.snow.css') }}"/>
+<style>
+  /* This project's global button/input styles (base-style.blade.php) make
+     every <button> full-width with a top margin, which would wreck
+     Quill's own toolbar icons — undo that just inside the editor. */
+  .ql-toolbar.ql-snow button,
+  .ql-snow .ql-picker { width: auto; margin-top: 0; background: none; padding: 3px 5px; border-radius: 0; font-size: inherit; }
+  .ql-toolbar.ql-snow button:disabled { background: none; }
+  .ql-editor { min-height: 260px; font-size: 15px; line-height: 1.6; }
+  .ql-editor img { max-width: 100%; height: auto; }
+</style>
+
+<label for="bodyEditor">Post Content</label>
 <div class="hint" style="margin-bottom:6px;line-height:1.6">
-  <strong>সাধারণ লেখা মোডে:</strong> যা লিখবেন বা অন্য জায়গা থেকে কপি করে পেস্ট করবেন, তাই লেখা হিসেবে দেখাবে — কোনো কোড ভাঙবে না। প্যারাগ্রাফের মাঝে একটা ফাঁকা লাইন ছাড়ুন। কিছু ঐচ্ছিক শর্টকাট:
-  <code>## Heading</code>,
-  <code>### Smaller Heading</code>,
-  <code>**bold text**</code>,
-  <code>[link text](https://example.com)</code>,
-  বুলেটের জন্য <code>-</code> অথবা নাম্বারিং এর জন্য <code>1.</code> দিয়ে লাইন শুরু করুন।
-  <br/><strong>HTML কোড মোডে:</strong> আপনি যা টাইপ করবেন তা সরাসরি HTML হিসেবে গণ্য হবে (ভিডিও/iframe এমবেড করতে এটা লাগবে) — কিন্তু তখন প্যারাগ্রাফ ব্রেক বা বুলেট অটো হবে না, নিজেই <code>&lt;p&gt;</code>/<code>&lt;ul&gt;</code> ট্যাগ লিখতে হবে।
-  <br/>নিচে <strong>Preview</strong> বাটনে ক্লিক করে পাবলিশ করার আগেই দেখে নিতে পারবেন কেমন দেখাবে।
+  সরাসরি লিখুন, পেস্ট করুন — ওপরের টুলবার দিয়ে হেডিং, বোল্ড, বুলেট/নাম্বার লিস্ট, লিঙ্ক, ছবি আর ভিডিও বসাতে পারবেন। অন্য জায়গা থেকে লেখা কপি-পেস্ট করলে স্বাভাবিক লেখা হিসেবে বসবে, কোনো কিছু ভাঙবে না।
+  ভিডিও বসাতে টুলবারের 🎬 বাটনে ক্লিক করে ইউটিউব লিঙ্ক দিন — এটা নিজে থেকেই পেজের সাথে মানানসই সাইজে বসবে।
+  <br/>নিচে <strong>Preview</strong> বাটনে ক্লিক করে পাবলিশ করার আগেই দেখে নিতে পারবেন লাইভ পেজে কেমন দেখাবে।
 </div>
-<textarea id="body" name="body" rows="18" style="font-family:monospace;font-size:13px" required>{{ old('body', isset($post) ? ($post->body_raw ?? $post->body) : '') }}</textarea>
+<div id="bodyEditor" style="background:#fff;border-radius:0 0 6px 6px"></div>
+<textarea id="body" name="body" required style="display:none">{{ old('body', $post->body ?? '') }}</textarea>
+<input type="radio" name="body_mode" value="html" checked class="body-mode-input" style="display:none"/>
 
 <button type="button" id="previewBtn" style="margin-top:10px;width:auto;background:#fff;color:#0d6efd;border:1px solid #0d6efd;padding:10px 18px">👁️ Preview</button>
 
@@ -101,6 +100,79 @@
 
 @include('admin.partials.content-preview-modal', ['previewUrl' => route('admin.blog.preview')])
 
+<script src="{{ asset('vendor/quill/quill.js') }}"></script>
+<script>
+(function () {
+  var bodyField = document.getElementById('body');
+  var toolbarOptions = [
+    [{ header: [2, 3, false] }],
+    ['bold', 'italic'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['link', 'image', 'video'],
+    ['clean']
+  ];
+
+  var quill = new Quill('#bodyEditor', {
+    theme: 'snow',
+    placeholder: 'এখানে লেখা শুরু করুন...',
+    modules: { toolbar: toolbarOptions }
+  });
+
+  if (bodyField.value.trim()) {
+    quill.clipboard.dangerouslyPasteHTML(bodyField.value);
+  }
+
+  quill.on('text-change', function () {
+    bodyField.value = quill.root.innerHTML;
+  });
+
+  var form = bodyField.closest('form');
+  if (form) {
+    form.addEventListener('submit', function () {
+      bodyField.value = quill.root.innerHTML;
+    });
+  }
+
+  var uploadImageUrl = @json(route('admin.blog.upload-image'));
+  var csrfToken = document.querySelector('input[name="_token"]').value;
+
+  quill.getModule('toolbar').addHandler('image', function () {
+    var input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = function () {
+      var file = input.files[0];
+      if (!file) return;
+
+      var formData = new FormData();
+      formData.append('image', file);
+
+      fetch(uploadImageUrl, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+        body: formData
+      })
+        .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+        .then(function (res) {
+          if (!res.ok || !res.data.url) {
+            alert((res.data && res.data.error) || 'ছবি আপলোড করা যায়নি, আবার চেষ্টা করুন।');
+            return;
+          }
+          var range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', res.data.url, 'user');
+          quill.setSelection(range.index + 1);
+        })
+        .catch(function () {
+          alert('ছবি আপলোড করা যায়নি, ইন্টারনেট সংযোগ চেক করুন।');
+        });
+    };
+  });
+
+  window.__blogQuill = quill;
+})();
+</script>
 <script>
 (function () {
   var btn = document.getElementById('aiGenerateBtn');
@@ -108,6 +180,7 @@
 
   var status = document.getElementById('aiGenerateStatus');
   var generateUrl = @json(route('admin.blog.generate'));
+  var previewUrl = @json(route('admin.blog.preview'));
 
   btn.addEventListener('click', function () {
     var topic = document.getElementById('ai_topic').value.trim();
@@ -118,10 +191,10 @@
 
     var titleField = document.getElementById('title');
     var excerptField = document.getElementById('excerpt');
-    var bodyField = document.getElementById('body');
+    var quill = window.__blogQuill;
 
     if (
-      (titleField.value.trim() || excerptField.value.trim() || bodyField.value.trim()) &&
+      (titleField.value.trim() || excerptField.value.trim() || quill.getText().trim()) &&
       !confirm('এখন যা লেখা আছে তা মুছে AI-এর খসড়া বসবে। এগোতে চান?')
     ) {
       return;
@@ -152,11 +225,25 @@
         }
         titleField.value = res.data.title;
         excerptField.value = res.data.excerpt;
-        bodyField.value = res.data.body;
-        var textMode = document.querySelector('.body-mode-input[value="text"]');
-        if (textMode) textMode.checked = true;
-        status.textContent = '✅ খসড়া বসানো হয়েছে — পাবলিশ করার আগে পড়ে, ঠিক করে নিন।';
-        titleField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // The AI returns plain-text with ##/**/- shortcuts, matching the
+        // same format ContentFormatterService's "text" mode expects —
+        // convert it to real HTML through the same endpoint the Preview
+        // button uses, then load that into the editor.
+        return fetch(previewUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': token },
+          body: JSON.stringify({ body: res.data.body, body_mode: 'text' })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (converted) {
+            var quill = window.__blogQuill;
+            quill.setText('');
+            quill.clipboard.dangerouslyPasteHTML(converted.html || '');
+            document.getElementById('body').value = quill.root.innerHTML;
+            status.textContent = '✅ খসড়া বসানো হয়েছে — পাবলিশ করার আগে পড়ে, ঠিক করে নিন।';
+            titleField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
       })
       .catch(function () {
         status.textContent = 'সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন।';

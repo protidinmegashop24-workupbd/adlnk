@@ -116,6 +116,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/blog', [BlogPostController::class, 'index'])->name('admin.blog.index');
     Route::get('/blog/create', [BlogPostController::class, 'create'])->name('admin.blog.create');
     Route::post('/blog/preview', [BlogPostController::class, 'preview'])->name('admin.blog.preview');
+    Route::post('/blog/upload-image', [BlogPostController::class, 'uploadImage'])
+        ->middleware('throttle:30,1,blog-upload-image')
+        ->name('admin.blog.upload-image');
     Route::post('/blog/generate', [BlogPostController::class, 'generate'])
         ->middleware('throttle:10,1,blog-generate')
         ->name('admin.blog.generate');

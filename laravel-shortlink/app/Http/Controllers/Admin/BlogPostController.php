@@ -94,6 +94,19 @@ class BlogPostController extends Controller
         ]);
     }
 
+    public function uploadImage(Request $request): JsonResponse
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'max:4096'],
+        ]);
+
+        $file = $request->file('image');
+        $filename = 'post-'.time().'-'.Str::random(8).'.'.$file->getClientOriginalExtension();
+        $file->move(public_path('images/blog/content'), $filename);
+
+        return response()->json(['url' => asset('images/blog/content/'.$filename)]);
+    }
+
     public function generate(Request $request, AiContentGeneratorService $generator): JsonResponse
     {
         $validated = $request->validate([
