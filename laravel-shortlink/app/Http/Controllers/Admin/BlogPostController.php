@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Services\AiContentGeneratorService;
 use App\Services\ContentFormatterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -91,6 +92,23 @@ class BlogPostController extends Controller
         return response()->json([
             'html' => $this->formatter->format($validated['body'], $validated['body_mode']),
         ]);
+    }
+
+    public function generate(Request $request, AiContentGeneratorService $generator): JsonResponse
+    {
+        $validated = $request->validate([
+            'topic' => ['required', 'string', 'max:200'],
+            'notes' => ['nullable', 'string', 'max:2000'],
+            'language' => ['required', 'in:bn,en'],
+        ]);
+
+        try {
+            $draft = $generator->generate($validated['topic'], $validated['notes'] ?? null, $validated['language']);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+
+        return response()->json($draft);
     }
 
     private function validatePost(Request $request, ?int $ignoreId = null): array

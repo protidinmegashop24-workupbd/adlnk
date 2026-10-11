@@ -7,6 +7,32 @@
   <div class="error">{{ $errors->first() }}</div>
 @endif
 
+<div style="border:1px solid #d6e4ff;border-radius:8px;padding:14px 16px;margin:0 0 20px;background:#f5f9ff">
+  <strong style="font-size:14px">✨ AI দিয়ে খসড়া লিখুন (ঐচ্ছিক)</strong>
+  <div class="hint" style="margin:4px 0 12px">
+    একটা বিষয় দিন — AI একটা নতুন, অরিজিনাল খসড়া লিখে Title/Excerpt/Post Content বক্সে বসিয়ে দিবে। এটা কোনো অন্য লেখা কপি/রিরাইট করে না — শুধু বিষয়টা নিয়ে নতুন করে লেখে।
+    <strong>পাবলিশ করার আগে অবশ্যই নিজে পড়ে, ঠিক করে, নিজের ভাষায় এডিট করে নিবেন।</strong>
+  </div>
+
+  <label for="ai_topic" style="font-weight:normal">বিষয় (Topic)</label>
+  <input id="ai_topic" type="text" style="margin-bottom:10px" placeholder="যেমন: কিভাবে ফ্রি QR কোড বানাবেন"/>
+
+  <label for="ai_notes" style="font-weight:normal">নোট / পয়েন্ট <span class="hint" style="display:inline">(ঐচ্ছিক)</span></label>
+  <textarea id="ai_notes" rows="2" style="margin-bottom:10px" placeholder="বিশেষ কিছু পয়েন্ট থাকলে লিখুন, না থাকলে ফাঁকা রাখুন"></textarea>
+
+  <div style="display:flex;gap:18px;margin-bottom:12px">
+    <label style="display:flex;align-items:center;gap:6px;font-weight:normal;margin:0">
+      <input type="radio" name="ai_language" value="bn" checked style="width:auto"/> বাংলা
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;font-weight:normal;margin:0">
+      <input type="radio" name="ai_language" value="en" style="width:auto"/> English
+    </label>
+  </div>
+
+  <button type="button" id="aiGenerateBtn" style="width:auto;padding:10px 18px;margin:0">✨ Generate Draft</button>
+  <span id="aiGenerateStatus" class="hint" style="display:none;margin-left:10px"></span>
+</div>
+
 <label for="title">Title</label>
 <input id="title" type="text" name="title" value="{{ old('title', $post->title ?? '') }}" required/>
 
@@ -74,3 +100,70 @@
 <button type="submit">{{ isset($post) ? 'Save Changes' : 'Create Post' }}</button>
 
 @include('admin.partials.content-preview-modal', ['previewUrl' => route('admin.blog.preview')])
+
+<script>
+(function () {
+  var btn = document.getElementById('aiGenerateBtn');
+  if (!btn) return;
+
+  var status = document.getElementById('aiGenerateStatus');
+  var generateUrl = @json(route('admin.blog.generate'));
+
+  btn.addEventListener('click', function () {
+    var topic = document.getElementById('ai_topic').value.trim();
+    if (!topic) {
+      alert('প্রথমে একটা বিষয় লিখুন।');
+      return;
+    }
+
+    var titleField = document.getElementById('title');
+    var excerptField = document.getElementById('excerpt');
+    var bodyField = document.getElementById('body');
+
+    if (
+      (titleField.value.trim() || excerptField.value.trim() || bodyField.value.trim()) &&
+      !confirm('এখন যা লেখা আছে তা মুছে AI-এর খসড়া বসবে। এগোতে চান?')
+    ) {
+      return;
+    }
+
+    var notes = document.getElementById('ai_notes').value.trim();
+    var language = document.querySelector('input[name="ai_language"]:checked').value;
+    var token = document.querySelector('input[name="_token"]').value;
+
+    btn.disabled = true;
+    status.style.display = 'inline';
+    status.textContent = 'লেখা তৈরি হচ্ছে... (কিছুক্ষণ সময় লাগতে পারে)';
+
+    fetch(generateUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': token
+      },
+      body: JSON.stringify({ topic: topic, notes: notes, language: language })
+    })
+      .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (res) {
+        if (!res.ok) {
+          status.textContent = res.data.error || 'তৈরি করা যায়নি, আবার চেষ্টা করুন।';
+          return;
+        }
+        titleField.value = res.data.title;
+        excerptField.value = res.data.excerpt;
+        bodyField.value = res.data.body;
+        var textMode = document.querySelector('.body-mode-input[value="text"]');
+        if (textMode) textMode.checked = true;
+        status.textContent = '✅ খসড়া বসানো হয়েছে — পাবলিশ করার আগে পড়ে, ঠিক করে নিন।';
+        titleField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      })
+      .catch(function () {
+        status.textContent = 'সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন।';
+      })
+      .finally(function () {
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
