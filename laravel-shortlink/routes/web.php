@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BlogCommentController as AdminBlogCommentController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\LinkController as AdminLinkController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BioPageController;
@@ -126,6 +127,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/links', [AdminLinkController::class, 'index'])->name('admin.links.index');
     Route::post('/links/{link}/disable', [AdminLinkController::class, 'disable'])->name('admin.links.disable');
     Route::post('/links/{link}/enable', [AdminLinkController::class, 'enable'])->name('admin.links.enable');
+
+    Route::get('/pages', [AdminPageController::class, 'index'])->name('admin.pages.index');
+    Route::get('/pages/{page}/edit', [AdminPageController::class, 'edit'])->name('admin.pages.edit');
+    Route::put('/pages/{page}', [AdminPageController::class, 'update'])->name('admin.pages.update');
 });
 
 // Order matters: specific routes (above, and /go/{code} below) must be

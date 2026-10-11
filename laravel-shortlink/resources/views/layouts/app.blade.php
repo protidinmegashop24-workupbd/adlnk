@@ -157,7 +157,7 @@
       </div>
       <div class="footer-col">
         <h4>Reach Out</h4>
-        <a href="mailto:support@klikwit.com">support@klikwit.com</a>
+        <a href="{{ route('pages.contact') }}">Contact Us</a>
         <a href="{{ route('report-abuse') }}">Report Abuse</a>
       </div>
     </div>

@@ -2,42 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use Illuminate\View\View;
 
 class PageController extends Controller
 {
     public function about(): View
     {
-        return view('pages.about');
+        return $this->show('about');
     }
 
     public function contact(): View
     {
-        return view('pages.contact');
+        return $this->show('contact');
     }
 
     public function privacy(): View
     {
-        return view('pages.privacy');
+        return $this->show('privacy');
     }
 
     public function terms(): View
     {
-        return view('pages.terms');
+        return $this->show('terms');
     }
 
     public function cookies(): View
     {
-        return view('pages.cookies');
+        return $this->show('cookies');
     }
 
     public function acceptableUse(): View
     {
-        return view('pages.acceptable-use');
+        return $this->show('acceptable-use');
     }
 
     public function dmca(): View
     {
-        return view('pages.dmca');
+        return $this->show('dmca');
+    }
+
+    private function show(string $slug): View
+    {
+        $page = Page::where('slug', $slug)->firstOrFail();
+
+        return view('pages.show', ['page' => $page]);
     }
 }

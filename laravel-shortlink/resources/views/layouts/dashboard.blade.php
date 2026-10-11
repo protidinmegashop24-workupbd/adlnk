@@ -50,6 +50,7 @@
         <a href="{{ route('admin.links.index') }}" class="{{ request()->routeIs('admin.links.*') ? 'active' : '' }}">🗂️ <span class="label">All Links</span></a>
         <a href="{{ route('admin.blog.index') }}" class="{{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">✍️ <span class="label">Blog Posts</span></a>
         <a href="{{ route('admin.comments.index') }}" class="{{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">💬 <span class="label">Comments</span></a>
+        <a href="{{ route('admin.pages.index') }}" class="{{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">📄 <span class="label">Site Pages</span></a>
         <a href="{{ route('admin.reports') }}" class="{{ request()->routeIs('admin.reports') ? 'active' : '' }}">🛡️ <span class="label">Abuse Reports</span></a>
       @endif
     </nav>
