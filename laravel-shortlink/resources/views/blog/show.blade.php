@@ -6,11 +6,15 @@
 @section('og-image', asset($post->thumbnail ?? 'images/blog/default.png'))
 @section('page-class', 'blog-wide')
 @section('extra-style')
-  .post-body{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:24px;margin-top:16px;line-height:1.7}
+  .post-body{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:24px;margin-top:16px;line-height:1.7;overflow-x:hidden}
   .post-body h2{font-size:1.2rem;margin-top:28px}
   .post-body p{margin:12px 0}
   .post-body ul,.post-body ol{margin:12px 0;padding-left:24px}
   .post-body a{color:#0d6efd}
+  .post-body img{max-width:100%;height:auto;border-radius:6px}
+  .post-body iframe{max-width:100%;width:100%;aspect-ratio:16/9;height:auto;border-radius:6px;border:0}
+  .post-body table{max-width:100%;display:block;overflow-x:auto}
+  .post-body pre{max-width:100%;overflow-x:auto}
   .post-hero{width:100%;max-height:320px;object-fit:cover;border-radius:8px;margin-top:16px}
   .back-link{display:inline-block;margin-top:20px;font-size:14px}
   .comments-section{margin-top:24px}
