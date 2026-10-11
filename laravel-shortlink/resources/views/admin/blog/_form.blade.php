@@ -42,16 +42,29 @@
 <input id="thumbnail_upload" type="file" name="thumbnail_upload" accept="image/*"/>
 
 <label for="body">Post Content</label>
+<div style="display:flex;gap:18px;margin:4px 0 10px">
+  <label style="display:flex;align-items:center;gap:6px;font-weight:normal;margin:0">
+    <input type="radio" name="body_mode" value="text" class="body-mode-input" style="width:auto" {{ old('body_mode', $post->body_mode ?? 'text') === 'text' ? 'checked' : '' }}/>
+    ✍️ সাধারণ লেখা (Plain Text)
+  </label>
+  <label style="display:flex;align-items:center;gap:6px;font-weight:normal;margin:0">
+    <input type="radio" name="body_mode" value="html" class="body-mode-input" style="width:auto" {{ old('body_mode', $post->body_mode ?? 'text') === 'html' ? 'checked' : '' }}/>
+    💻 HTML কোড (Advanced)
+  </label>
+</div>
 <div class="hint" style="margin-bottom:6px;line-height:1.6">
-  Just type normally — no coding needed. Leave a blank line between paragraphs. A few optional shortcuts:
+  <strong>সাধারণ লেখা মোডে:</strong> যা লিখবেন বা অন্য জায়গা থেকে কপি করে পেস্ট করবেন, তাই লেখা হিসেবে দেখাবে — কোনো কোড ভাঙবে না। প্যারাগ্রাফের মাঝে একটা ফাঁকা লাইন ছাড়ুন। কিছু ঐচ্ছিক শর্টকাট:
   <code>## Heading</code>,
   <code>### Smaller Heading</code>,
   <code>**bold text**</code>,
   <code>[link text](https://example.com)</code>,
-  a list of lines starting with <code>-</code> for bullets or <code>1.</code> for numbers.
-  <br/>If you type a real HTML tag anywhere (like <code>&lt;h2&gt;</code>), the whole post switches to raw HTML mode instead — don't mix the two styles in one post.
+  বুলেটের জন্য <code>-</code> অথবা নাম্বারিং এর জন্য <code>1.</code> দিয়ে লাইন শুরু করুন।
+  <br/><strong>HTML কোড মোডে:</strong> আপনি যা টাইপ করবেন তা সরাসরি HTML হিসেবে গণ্য হবে (ভিডিও/iframe এমবেড করতে এটা লাগবে) — কিন্তু তখন প্যারাগ্রাফ ব্রেক বা বুলেট অটো হবে না, নিজেই <code>&lt;p&gt;</code>/<code>&lt;ul&gt;</code> ট্যাগ লিখতে হবে।
+  <br/>নিচে <strong>Preview</strong> বাটনে ক্লিক করে পাবলিশ করার আগেই দেখে নিতে পারবেন কেমন দেখাবে।
 </div>
-<textarea id="body" name="body" rows="18" style="font-family:monospace;font-size:13px" required>{{ old('body', isset($post) ? $post->body : '') }}</textarea>
+<textarea id="body" name="body" rows="18" style="font-family:monospace;font-size:13px" required>{{ old('body', isset($post) ? ($post->body_raw ?? $post->body) : '') }}</textarea>
+
+<button type="button" id="previewBtn" style="margin-top:10px;width:auto;background:#fff;color:#0d6efd;border:1px solid #0d6efd;padding:10px 18px">👁️ Preview</button>
 
 <label style="display:flex;align-items:center;gap:8px;margin-top:16px">
   <input type="checkbox" name="published" value="1" style="width:auto" {{ old('published', $post->published ?? true) ? 'checked' : '' }}/>
@@ -59,3 +72,5 @@
 </label>
 
 <button type="submit">{{ isset($post) ? 'Save Changes' : 'Create Post' }}</button>
+
+@include('admin.partials.content-preview-modal', ['previewUrl' => route('admin.blog.preview')])

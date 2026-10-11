@@ -115,6 +115,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/blog', [BlogPostController::class, 'index'])->name('admin.blog.index');
     Route::get('/blog/create', [BlogPostController::class, 'create'])->name('admin.blog.create');
+    Route::post('/blog/preview', [BlogPostController::class, 'preview'])->name('admin.blog.preview');
     Route::post('/blog', [BlogPostController::class, 'store'])->name('admin.blog.store');
     Route::get('/blog/{post}/edit', [BlogPostController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blog/{post}', [BlogPostController::class, 'update'])->name('admin.blog.update');
@@ -129,6 +130,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/links/{link}/enable', [AdminLinkController::class, 'enable'])->name('admin.links.enable');
 
     Route::get('/pages', [AdminPageController::class, 'index'])->name('admin.pages.index');
+    Route::post('/pages/preview', [AdminPageController::class, 'preview'])->name('admin.pages.preview');
     Route::get('/pages/{page}/edit', [AdminPageController::class, 'edit'])->name('admin.pages.edit');
     Route::put('/pages/{page}', [AdminPageController::class, 'update'])->name('admin.pages.update');
 });

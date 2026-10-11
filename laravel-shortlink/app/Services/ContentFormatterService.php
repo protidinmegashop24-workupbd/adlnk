@@ -4,31 +4,45 @@ namespace App\Services;
 
 /**
  * Non-technical-friendly body formatter, shared by every admin content
- * editor (blog posts, static pages). If the admin typed plain text (no
- * real HTML tags), this converts a small set of easy, Markdown-like
- * shortcuts so they never need to write actual HTML:
- *   ## Heading / ### Smaller Heading
- *   - bullet  (every line in the block starting with - or *)
- *   1. numbered  (every line in the block starting with a number + ".")
- *   **bold**
- *   [link text](https://example.com)
- * Everything else becomes a plain paragraph. If the admin writes real
- * HTML tags anywhere in the content, the whole body is trusted as-is
- * instead — this is single-admin-authored content, but mixing the two
- * styles in one piece of content isn't supported (documented in each
- * admin form's hint text).
+ * editor (blog posts, static pages). The admin explicitly picks a mode
+ * per post/page:
+ *   - 'text': always treated as plain words. A small set of easy,
+ *     Markdown-like shortcuts are converted so they never need to write
+ *     actual HTML: ## Heading / ### Smaller Heading, - bullet (every line
+ *     in the block starting with - or *), 1. numbered (every line
+ *     starting with a number + "."), **bold**, [link text](url).
+ *     Anything that looks like an HTML tag is escaped and shown as
+ *     literal text instead of being interpreted — this is what keeps
+ *     content copy-pasted from other pages/documents from breaking the
+ *     layout.
+ *   - 'html': trusted as raw HTML as-is (needed for embedding videos,
+ *     etc.) — this is single-admin-authored content.
  */
 class ContentFormatterService
 {
-    public function format(string $raw): string
+    public function format(string $raw, string $mode = 'auto'): string
     {
-        // Looks for an actual HTML tag shape (<tag ...> or </tag>), not just any
-        // "<" character — plain prose like "5 < 10" must not accidentally flip
-        // the whole body into the untouched raw-HTML trust path.
+        if ($mode === 'html') {
+            return $raw;
+        }
+
+        if ($mode === 'text') {
+            return $this->formatPlainText($raw);
+        }
+
+        // Legacy auto-detect, kept only for any caller that doesn't pass an
+        // explicit mode: looks for an actual HTML tag shape (<tag ...> or
+        // </tag>), not just any "<" character — plain prose like "5 < 10"
+        // must not accidentally flip the whole body into the raw-HTML path.
         if (preg_match('/<\/?[a-zA-Z][a-zA-Z0-9]*(\s[^>]*)?>/', $raw)) {
             return $raw;
         }
 
+        return $this->formatPlainText($raw);
+    }
+
+    private function formatPlainText(string $raw): string
+    {
         $blocks = preg_split('/\n\s*\n/', trim($raw));
 
         return collect($blocks)

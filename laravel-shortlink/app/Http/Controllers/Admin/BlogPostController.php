@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Services\ContentFormatterService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -30,7 +31,8 @@ class BlogPostController extends Controller
     {
         $data = $this->validatePost($request);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['title']);
-        $data['body'] = $this->formatter->format($data['body']);
+        $data['body_raw'] = $data['body'];
+        $data['body'] = $this->formatter->format($data['body'], $data['body_mode']);
         $data['author_id'] = $request->user()->id;
 
         if ($request->hasFile('thumbnail_upload')) {
@@ -56,7 +58,8 @@ class BlogPostController extends Controller
         $data = $this->validatePost($request, $post->id);
         $newSlug = $data['slug'] ?: $post->slug;
         $data['slug'] = $newSlug === $post->slug ? $post->slug : $this->uniqueSlug($newSlug, $post->id);
-        $data['body'] = $this->formatter->format($data['body']);
+        $data['body_raw'] = $data['body'];
+        $data['body'] = $this->formatter->format($data['body'], $data['body_mode']);
 
         if ($request->hasFile('thumbnail_upload')) {
             $data['thumbnail'] = $this->storeThumbnail($request, $data['slug']);
@@ -78,6 +81,18 @@ class BlogPostController extends Controller
         return redirect()->route('admin.blog.index')->with('status', 'Post deleted.');
     }
 
+    public function preview(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'body' => ['required', 'string'],
+            'body_mode' => ['required', 'in:text,html'],
+        ]);
+
+        return response()->json([
+            'html' => $this->formatter->format($validated['body'], $validated['body_mode']),
+        ]);
+    }
+
     private function validatePost(Request $request, ?int $ignoreId = null): array
     {
         $validated = $request->validate([
@@ -87,6 +102,7 @@ class BlogPostController extends Controller
             'excerpt' => ['required', 'string', 'max:500'],
             'meta_description' => ['nullable', 'string', 'max:500'],
             'body' => ['required', 'string'],
+            'body_mode' => ['required', 'in:text,html'],
             'category' => ['required', 'string', 'max:60'],
             'published' => ['nullable', 'boolean'],
             'thumbnail_upload' => ['nullable', 'image', 'max:2048'],
