@@ -38,4 +38,21 @@ class BlogPost extends Model
     {
         return $this->comments()->where('approved', true)->oldest();
     }
+
+    /**
+     * Finds YouTube video IDs from <iframe> embeds in the post body, so the
+     * page can emit matching VideoObject structured data automatically —
+     * Google's Video indexing report needs this schema to index embedded
+     * video, a plain iframe alone usually isn't enough.
+     *
+     * @return array<int, string>
+     */
+    public function youtubeVideoIds(): array
+    {
+        if (! preg_match_all('#youtube(?:-nocookie)?\.com/embed/([a-zA-Z0-9_-]{11})#i', $this->body, $matches)) {
+            return [];
+        }
+
+        return array_values(array_unique($matches[1]));
+    }
 }

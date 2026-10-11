@@ -87,4 +87,27 @@
     "description": @json($post->excerpt)
   }
   </script>
+  @foreach ($post->youtubeVideoIds() as $videoId)
+    {{--
+      Google's Video indexing report needs VideoObject structured data to
+      index an embedded video — a bare <iframe> alone usually isn't enough.
+      name/description reuse the post's own title/excerpt (the video is
+      embedded specifically to illustrate this post, so that's accurate
+      framing, not a guess) and uploadDate uses this post's publish date as
+      a reasonable stand-in since the video's own upload date isn't stored
+      here. thumbnailUrl/embedUrl are YouTube's own real, predictable URLs
+      for this exact video ID.
+    --}}
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "VideoObject",
+      "name": @json($post->title),
+      "description": @json($post->excerpt),
+      "thumbnailUrl": @json("https://i.ytimg.com/vi/{$videoId}/hqdefault.jpg"),
+      "uploadDate": @json($post->published_at?->toIso8601String()),
+      "embedUrl": @json("https://www.youtube.com/embed/{$videoId}")
+    }
+    </script>
+  @endforeach
 @endsection
