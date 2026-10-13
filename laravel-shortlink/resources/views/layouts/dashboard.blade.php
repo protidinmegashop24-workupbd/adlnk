@@ -88,5 +88,6 @@
   document.addEventListener('click', function(){ dd.classList.remove('show'); });
 })();
 </script>
+@include('partials.pwa-install')
 </body>
 </html>
