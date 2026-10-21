@@ -145,8 +145,10 @@
         <h4>Link Tools</h4>
         <a href="{{ route('home') }}">URL Shortener</a>
         <a href="{{ route('home') }}">QR Code Generator</a>
+        <a href="{{ route('tools.expand') }}">URL Expander</a>
+        <a href="{{ route('tools.check') }}">Link Checker</a>
+        <a href="{{ route('tools.index') }}">All Tools</a>
         <a href="{{ route('bio.edit') }}">Link-in-Bio</a>
-        <a href="{{ route('dashboard') }}">Link Analytics</a>
       </div>
       <div class="footer-col">
         <h4>SEO Tools</h4>

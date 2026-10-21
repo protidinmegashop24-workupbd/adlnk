@@ -6,6 +6,8 @@
       <a href="{{ route('home') }}">URL Shortener</a>
       <a href="{{ route('home') }}#bulk-section">Bulk URL Shortener</a>
       <a href="{{ route('home') }}">QR Code Generator</a>
+      <a href="{{ route('tools.expand') }}">URL Expander</a>
+      <a href="{{ route('tools.check') }}">Link Checker</a>
       <a href="{{ route('dashboard') }}">Link Analytics</a>
       <a href="{{ route('home') }}">Custom Links</a>
       <a href="{{ route('bio.edit') }}">Link-in-Bio</a>
