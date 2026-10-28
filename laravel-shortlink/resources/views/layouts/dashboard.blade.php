@@ -7,6 +7,7 @@
 <title>@yield('title', 'klikwit')</title>
 @include('partials.favicons')
 @include('partials.google-analytics')
+@include('partials.google-adsense')
 <style>
 @include('partials.base-style')
   h1{font-size:1.5rem;text-align:left;margin-top:0}
